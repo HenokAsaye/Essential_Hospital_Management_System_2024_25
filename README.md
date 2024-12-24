@@ -1,5 +1,5 @@
 Essential-Hospital-Management-System
-Group Members                 Id
+Group Members                    Id
 1,Abel Guta                   UGR/0165/15
 2,Henok Asaye                 UGR/4382/15
 3,Hermela Andargie            UGR/9777/15
