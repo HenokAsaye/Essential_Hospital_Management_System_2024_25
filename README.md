@@ -1,4 +1,4 @@
-# Essential-Hospital-Management-System_2024_2025
+# Essential-Hospital-Management-System
 
 Group Members
 
