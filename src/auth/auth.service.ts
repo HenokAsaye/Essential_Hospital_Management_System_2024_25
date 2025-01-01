@@ -108,6 +108,9 @@ export class AuthService {
       });
       console.log(process.env.JWT_SECRET)
 
+      console.log('JWT_SECRET:', process.env.JWT_SECRET); 
+      console.log('Generated Access Token:', accessToken); 
+
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
         sameSite: 'strict',
@@ -118,7 +121,7 @@ export class AuthService {
         message: 'Login Successful',
       };
     } catch (error) {
-      console.error('Error in login:', error);
+      console.error('Error in login:', error); 
       throw new InternalServerErrorException('An error occurred while logging in.');
     }
   }

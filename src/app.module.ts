@@ -2,14 +2,29 @@ import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { JwtAuthMiddleware } from './auth/middleware/auth.middleware';
 import { JwtModule } from '@nestjs/jwt';
 import {AuthModule} from "./auth/auth.module"
+import { ConfigModule } from '@nestjs/config';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { PatientModule } from './patient/patient.module';
+import { AdminModule } from './admin/admin.module';
+import { DoctorModule } from './doctor/doctor.module';
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
   imports: [
     JwtModule.register({
       secret: process.env.JWT_SECRET,
     }),
-    AuthModule
+    AuthModule,
+    PatientModule,
+    AdminModule,
+    DoctorModule,
+    PrismaModule,
+    ConfigModule
+
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
@@ -23,3 +38,5 @@ export class AppModule {
       .forRoutes('*');
   }
 }
+
+
