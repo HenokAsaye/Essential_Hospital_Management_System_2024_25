@@ -105,20 +105,22 @@ export class AuthService {
       const payload = { sub: user.id, role: user.role };
       const accessToken = this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
-        expiresIn: '1h',  // Optional: Set token expiration time
       });
+
+      console.log('JWT_SECRET:', process.env.JWT_SECRET); 
+      console.log('Generated Access Token:', accessToken); 
 
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
         sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production',  // Ensure 'secure' is true in production
+        secure: process.env.NODE_ENV === 'production',
       });
 
       return {
         message: 'Login Successful',
       };
     } catch (error) {
-      console.error('Error in login:', error);
+      console.error('Error in login:', error); 
       throw new InternalServerErrorException('An error occurred while logging in.');
     }
   }
