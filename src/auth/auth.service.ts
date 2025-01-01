@@ -75,7 +75,7 @@ export class AuthService {
       const payload = { sub: user.id, role: user.role };
       const accessToken = this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
-        expiresIn: '1h',  // Optional: Set token expiration time
+        expiresIn: '1h',  
       });
 
       return {
@@ -105,13 +105,13 @@ export class AuthService {
       const payload = { sub: user.id, role: user.role };
       const accessToken = this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
-        expiresIn: '1h',  // Optional: Set token expiration time
       });
+      console.log(process.env.JWT_SECRET)
 
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
         sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production',  // Ensure 'secure' is true in production
+        secure: process.env.NODE_ENV === 'production',
       });
 
       return {

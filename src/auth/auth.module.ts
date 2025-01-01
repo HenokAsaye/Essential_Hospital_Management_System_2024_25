@@ -17,11 +17,4 @@ import { RequestMethod } from '@nestjs/common';
   controllers: [AuthController],
   exports: [AuthService], 
 })
-export class AuthModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JwtAuthMiddleware).forRoutes(
-      { path: 'auth/login', method: RequestMethod.POST },
-      { path: 'auth/logout', method: RequestMethod.POST },
-    );
-  }
-}
+export class AuthModule {}

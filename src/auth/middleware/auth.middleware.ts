@@ -12,9 +12,11 @@ export class JwtAuthMiddleware implements NestMiddleware {
     if (!token) {
       throw new UnauthorizedException('Invalid or expired Authentication token');
     }
-
     try {
-      const payload = this.jwtService.verify(token);
+      const payload = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET,  
+      });
+
       req.user = payload; 
       next();
     } catch (error) {
@@ -22,3 +24,4 @@ export class JwtAuthMiddleware implements NestMiddleware {
     }
   }
 }
+
