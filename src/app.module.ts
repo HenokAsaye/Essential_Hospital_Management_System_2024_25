@@ -34,6 +34,8 @@ export class AppModule {
         { path: '/auth/login', method: RequestMethod.POST },
         { path: '/auth/signup', method: RequestMethod.POST},
         { path: '/auth/signupdoctor', method: RequestMethod.POST },
+        {path:   '/auth/firstadmin' , method:RequestMethod.POST},
+        {path:   'auth/loginadmin' , method:RequestMethod.POST}
       )
       .forRoutes('*');
   }
