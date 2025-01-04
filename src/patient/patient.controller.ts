@@ -1,21 +1,23 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { PatientService } from './patient.service';
-import { GetAppointmentsDto } from './dto/get-appointments.dto';
-import { GetMedicalHistoryDto } from './dto/get-medical-history.dto';
 
 @Controller('patient')
 export class PatientController {
   constructor(private readonly patientService: PatientService) {}
-
-  // Get Patient Appointments
   @Get('appointments')
-  async getAppointments(@Query() getAppointmentsDto: GetAppointmentsDto) {
-    return this.patientService.getAppointments(getAppointmentsDto);
+  async getAppointments(@Req() req) {
+    const userId = req.user?.sub; 
+    if (!userId) {
+      throw new Error('User not authenticated or user ID is missing');
+    }
+    return this.patientService.getAppointments(userId);
   }
-
-  // Get Patient Medical History
   @Get('medical-history')
-  async getMedicalHistory(@Query() getMedicalHistoryDto: GetMedicalHistoryDto) {
-    return this.patientService.getMedicalHistory(getMedicalHistoryDto);
+  async getMedicalHistory(@Req() req) {
+    const userId = req.user?.sub;
+    if (!userId) {
+      throw new Error('User not authenticated or user ID is missing');
+    }
+    return this.patientService.getMedicalHistory(userId);
   }
 }
