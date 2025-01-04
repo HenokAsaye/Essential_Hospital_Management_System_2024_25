@@ -1,28 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { GetAppointmentsDto } from './dto/get-appointments.dto';
-import { GetMedicalHistoryDto } from './dto/get-medical-history.dto';
-
 @Injectable()
 export class PatientService {
   constructor(private readonly prisma: PrismaService) {}
-  async getAppointments(getAppointmentsDto: GetAppointmentsDto) {
-    const { patientId } = getAppointmentsDto;
+  async getAppointments(userId: number) {
     return this.prisma.appointment.findMany({
-      where: { patientId },
+      where: { patientId: userId },
       include: {
         Doctor: {
           select: {
-            name: true, 
+            name: true,
           },
         },
       },
     });
   }
-  async getMedicalHistory(getMedicalHistoryDto: GetMedicalHistoryDto) {
-    const { patientId } = getMedicalHistoryDto;
+  async getMedicalHistory(userId: number) {
     return this.prisma.patient.findUnique({
-      where: { userId: patientId },
+      where: { userId },
       select: {
         medicalHistory: true,
       },
