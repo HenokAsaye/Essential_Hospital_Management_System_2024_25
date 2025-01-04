@@ -1,5 +1,7 @@
-import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Res, } from '@nestjs/common';
 import { InternalServerErrorException } from '@nestjs/common';
+import {AdminDto} from './dto/admin.dto'
+import { HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { SignupDto } from './dto/signup.dto';
@@ -8,7 +10,6 @@ import { Response } from 'express';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
   @Post('signup')
   async signup(@Body() signupDto: SignupDto, @Res() res: Response) {
     try {
@@ -24,7 +25,6 @@ export class AuthController {
         .json({ message: 'An error occurred during signup' });
     }
   }
-
   @Post('signupdoctor')
   async signupDoctor(@Body() signupDto: SignupDto, @Res() res: Response) {
     try {
@@ -40,7 +40,6 @@ export class AuthController {
         .json({ message: 'An error occurred during doctor signup' });
     }
   }
-
   @Post('login')
   async login(@Body() loginDto: LoginDto, @Res() res: Response) {
     try {
@@ -51,12 +50,18 @@ export class AuthController {
       });
     } catch (error) {
       console.error('Error during login:', error.message);
-      return res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .json({ message: 'An error occurred during login' });
+  
+      if (error instanceof UnauthorizedException) {
+        return res.status(HttpStatus.UNAUTHORIZED).json({
+          message: error.message,
+          error: 'Unauthorized',
+        });
+      }
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        message: 'An error occurred during login',
+      });
     }
   }
-
   @Post('logout')
   async logOut(@Res({ passthrough: true }) res: Response) {
     try {
@@ -69,6 +74,34 @@ export class AuthController {
       return res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ message: 'An error occurred during logout' });
+    }
+  }
+  @Post('firstadmin')
+  async FirstAdmin(@Body() AdminDto:AdminDto, @Res() res:Response){
+    try{
+      const result = await this.authService.firstAdmin(AdminDto)
+      return res.status(HttpStatus.CREATED).json({
+        message:"Welcome You Are the First Admin",
+        data:result,
+      })
+    }catch(error){
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({message:'An Error occured during firstAdmin Signup'})
+    }
+  }
+  @Post('loginadmin')
+  async LoginAdmin(@Body() AdminDto:AdminDto,@Res() res:Response){
+    try {
+      const result = await this.authService.logInAdmin(AdminDto,res)
+      return res.status(HttpStatus.OK).json({
+        message:"Welcome Back Admin",
+        data:result
+      })
+    } catch (error) {
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({message:"An Error occured during Adminlogin"})
     }
   }
 }
