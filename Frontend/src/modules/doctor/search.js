@@ -37,11 +37,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var api_helper_1 = require("../../utility/api-helper");
+var history_1 = require("./history");
 var searchForm = document.getElementById('search-form');
 var searchInput = document.getElementById('search-input');
 var resultsTable = document.getElementById('results-table');
+var patientHistorySection = document.getElementById('patient-history');
 searchForm.addEventListener('submit', function (e) { return __awaiter(void 0, void 0, void 0, function () {
-    var name, patients, tbody, newTbody_1, error_1;
+    var name, patients, tbody, newTbody_1, manageButtons, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -63,11 +65,18 @@ searchForm.addEventListener('submit', function (e) { return __awaiter(void 0, vo
                 newTbody_1 = document.createElement('tbody');
                 patients.forEach(function (patient, index) {
                     var row = document.createElement('tr');
-                    row.innerHTML = "\n        <td>".concat(index + 1, "</td>\n        <td>").concat(patient.name, "</td>\n        <td>").concat(patient.email, "</td>\n      ");
+                    row.innerHTML = "\n        <td>".concat(index + 1, "</td>\n        <td>").concat(patient.name, "</td>\n        <td>").concat(patient.email, "</td>\n        <td>\n          <button class=\"btn btn-primary btn-sm manage-history-btn\" data-patient-id=\"").concat(patient.id, "\">\n            Manage Medical History\n          </button>\n        </td>\n      ");
                     newTbody_1.appendChild(row);
                 });
                 resultsTable.appendChild(newTbody_1);
                 resultsTable.style.display = 'table'; // Show the table
+                manageButtons = document.querySelectorAll('.manage-history-btn');
+                manageButtons.forEach(function (button) {
+                    button.addEventListener('click', function (event) {
+                        var patientId = event.target.dataset.patientId;
+                        handleManageHistory(patientId);
+                    });
+                });
                 return [3 /*break*/, 4];
             case 3:
                 error_1 = _a.sent();
@@ -78,3 +87,20 @@ searchForm.addEventListener('submit', function (e) { return __awaiter(void 0, vo
         }
     });
 }); });
+// Handle the "Manage Medical History" button click
+function handleManageHistory(patientId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (patientHistorySection) {
+                        patientHistorySection.style.display = 'block';
+                    }
+                    return [4 /*yield*/, (0, history_1.initializeHistory)(patientId)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
