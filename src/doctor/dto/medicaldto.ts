@@ -7,6 +7,6 @@ export class MedicalDto{
     @IsString()
     @IsNotEmpty()
     note:string;
-    @IsDate()
+    @IsString()
     date:Date;
 }
