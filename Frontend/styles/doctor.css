@@ -1,0 +1,192 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+    color: #333;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Header */
+  .header {
+    background-color: #3a5ba0;
+    color: #fff;
+    padding: 16px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header .doctor-title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  /* Main Content */
+  .main-content {
+    padding: 16px;
+  }
+  
+  h2 {
+    margin-bottom: 16px;
+    color: #3a5ba0;
+    font-size: 20px;
+  }
+  
+  /* Section Styling */
+  section {
+    margin-bottom: 32px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+  }
+  
+  table thead th {
+    background-color: #3a5ba0;
+    color: #fff;
+    text-align: left;
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  table tbody td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+  }
+  
+  table tbody tr:nth-child(odd) {
+    background-color: #f4f4f4;
+  }
+  
+  /* Buttons */
+  button {
+    background-color: #3a5ba0;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    margin: 0 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  button:hover {
+    background-color: #2a4880;
+  }
+  
+  .history-item {
+    background-color: #f4f4f4;
+    padding: 16px;
+    margin: 16px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .history-item p {
+    margin-bottom: 8px;
+  }
+  
+  /* Form Styling */
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  
+  form input {
+    flex: 1 1 calc(100% - 80px);
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  form button {
+    flex: 1 1 80px;
+    min-width: 80px;
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 16px;
+    margin-top: 32px;
+    background-color: #3a5ba0;
+    color: #fff;
+    font-size: 12px;
+  }
+  
+  /* Mobile Styles (Default) */
+  .main-content {
+    max-width: 100%;
+  }
+  
+  table thead th,
+  table tbody td {
+    font-size: 14px;
+  }
+  
+  .history-item {
+    font-size: 14px;
+  }
+  
+  /* Tablet Styles */
+  @media (min-width: 768px) {
+    .main-content {
+      max-width: 90%;
+      margin: 0 auto;
+      padding: 32px;
+    }
+  
+    table thead th,
+    table tbody td {
+      font-size: 16px;
+    }
+  
+    button {
+      font-size: 16px;
+    }
+  
+    form input {
+      flex: 1 1 calc(75% - 16px);
+    }
+  
+    form button {
+      flex: 1 1 calc(25%);
+    }
+  }
+  
+  /* Desktop Styles */
+  @media (min-width: 1024px) {
+    .main-content {
+      max-width: 1200px;
+      margin: 32px auto;
+      padding: 32px;
+    }
+  
+    table thead th,
+    table tbody td {
+      font-size: 16px;
+    }
+  
+    button {
+      padding: 14px 20px;
+      font-size: 16px;
+    }
+  
+    .history-item {
+      font-size: 16px;
+    }
+  }
+  

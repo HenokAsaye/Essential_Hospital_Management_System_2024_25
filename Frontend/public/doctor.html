@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&family=Roboto:ital,
+  wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <title>Doctor Dashboard</title>
+  <link rel="stylesheet" href="../styles/doctor.css">
+  <link rel="stylesheet" href="../styles/bootstrap.css">
+</head>
+<body>
+  <header class="header">
+    <div class="doctor-title">Doctor</div>
+  </header>
+  <main class="main-content">
+    <section id="schedule-management">
+      <h2>Schedule Management</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Patient Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2025-01-05</td>
+            <td>10:00 AM</td>
+            <td>Fasil Mulugeta</td>
+            <td>
+              <button>View</button>
+              <button>Cancel</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2025-01-05</td>
+            <td>11:00 AM</td>
+            <td>Zelalem Alemu</td>
+            <td>
+              <button>View</button>
+              <button>Cancel</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section id="search-patients">
+      <h2>Search Patient Records</h2>
+      <form>
+        <input type="text" placeholder="Enter patient name or ID" />
+        <button type="submit">Search</button>
+      </form>
+    </section>
+
+    <section id="patient-history">
+      <h2>Patient History Management</h2>
+      <div class="history-item">
+        <p><strong>Patient:</strong> Zelalem Alemu</p>
+        <p><strong>Last Visit:</strong> 2025-1-20</p>
+        <button>View History</button>
+      </div>
+      <div class="history-item">
+        <p><strong>Patient:</strong> Fasil Mulugeta</p>
+        <p><strong>Last Visit:</strong> 2025-1-18</p>
+        <button>View History</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    &copy; 2025 Patient Management System. All Rights Reserved.
+  </footer>
+</body>
+</html>
