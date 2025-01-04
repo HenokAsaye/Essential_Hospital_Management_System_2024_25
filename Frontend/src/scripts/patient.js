@@ -1,5 +1,5 @@
 import { fetchAppointments } from '../modules/patient/appointment';
-import { fetchMedicalHistory } from '../../src/modules/patient/medical-history';
+import { fetchMedicalHistory } from '../modules/patient/medicalHistory';
 import { fetchDashboardData } from '../modules/patient/dashboard';
 
 // Function to populate the appointments section
