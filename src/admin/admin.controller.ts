@@ -35,8 +35,8 @@ export class AdminController {
     return this.adminService.getAllRequest()
   }
   @Post('invite-admin')
-  async sendAdminInvite(@Body() data: SendAdminInviteDto) {
-    return this.adminService.sendAdminInvite(data);
+  async inviteadmin(@Body() data: SendAdminInviteDto) {
+    return this.adminService.inviteAdmin(data);
   }
   @Post('find-user')
   async findUserByEmail(@Body() data: FindUserByEmailDto) {

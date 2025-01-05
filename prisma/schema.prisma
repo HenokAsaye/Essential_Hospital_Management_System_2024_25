@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,84 +7,80 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role{
-  Patient
-  Admin
-  Doctor
-}
 model User {
-  id               Int               @id @default(autoincrement())
-  name             String
-  email            String            @unique
-  password         String
-  role             Role
-  age              Int?              
-  gender           String?           
-  contact          String?           
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  doctorRequests   DoctorRequest[]   
-  appointments     Appointment[]     @relation("PatientAppointments") 
-  doctorSessions   Appointment[]     @relation("DoctorAppointments")  
-  admin            Admin?
-  patient          Patient?
-  doctor           Doctor?
+  id             Int             @id @default(autoincrement())
+  name           String
+  email          String          @unique
+  password       String
+  role           Role
+  age            Int?
+  gender         String?
+  contact        String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  admin          Admin?
+  doctorSessions Appointment[]   @relation("DoctorAppointments")
+  appointments   Appointment[]   @relation("PatientAppointments")
+  doctor         Doctor?
+  doctorRequests DoctorRequest[]
+  patient        Patient?
 }
 
 model Admin {
-  id          Int      @id @default(autoincrement())
-  userId      Int      @unique 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  User        User     @relation(fields: [userId], references: [id])
-}
-
-model Patient {
-  id              Int      @id @default(autoincrement())
-  userId          Int      @unique 
-  medicalHistory  Json?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  User            User     @relation(fields: [userId], references: [id])
-}
-
-model Doctor {
-  id            Int      @id @default(autoincrement())
-  userId        Int      @unique 
-  availability  String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
-  User          User     @relation(fields: [userId], references: [id])
-}
-enum requestStatus{
-  PENDING
-  APPROVED
-  REJECTED
-}
-model DoctorRequest {
   id        Int      @id @default(autoincrement())
-  userId    Int
-  status    requestStatus   
+  userId    Int      @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   User      User     @relation(fields: [userId], references: [id])
 }
 
+model Patient {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  medicalHistory Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  User           User     @relation(fields: [userId], references: [id])
+}
 
+model Doctor {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @unique
+  availability String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  User         User     @relation(fields: [userId], references: [id])
+}
+
+model DoctorRequest {
+  id        Int           @id @default(autoincrement())
+  userId    Int
+  status    requestStatus
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  User      User          @relation(fields: [userId], references: [id])
+}
 
 model Appointment {
   id        Int      @id @default(autoincrement())
   patientId Int
   doctorId  Int
-  date      DateTime
   time      DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  Patient   User     @relation("PatientAppointments", fields: [patientId], references: [id])
+  date      DateTime
   Doctor    User     @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  Patient   User     @relation("PatientAppointments", fields: [patientId], references: [id])
+}
+
+enum Role {
+  Patient
+  Admin
+  Doctor
+}
+
+enum requestStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
