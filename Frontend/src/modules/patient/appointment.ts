@@ -27,3 +27,24 @@ export async function fetchAppointments(
     throw error;
   }
 }
+
+// Function to populate the appointments section
+export async function populateAppointments(patientId: number) {
+  const appointmentsContainer = document.getElementById('appointments');
+  try {
+    const appointments = await fetchAppointments(patientId);
+    appointmentsContainer.innerHTML = appointments
+      .map(
+        (appointment) =>
+          `<div class="appointment-card">
+            <p><strong>Date:</strong> ${appointment.date}</p>
+            <p><strong>Time:</strong> ${appointment.time}</p>
+            <p><strong>Doctor:</strong> ${appointment.doctorName}</p>
+          </div>`,
+      )
+      .join('');
+  } catch (error) {
+    appointmentsContainer.innerHTML = '<p>Error loading appointments.</p>';
+    console.error(error);
+  }
+}

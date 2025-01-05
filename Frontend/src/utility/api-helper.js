@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postData = postData;
 exports.getData = getData;
 exports.putData = putData;
+exports.patchData = patchData;
 exports.deleteData = deleteData;
 exports.logout = logout;
 var BASE_URL = 'http://localhost:5000';
@@ -109,6 +110,26 @@ function putData(url, data) {
                         },
                         body: JSON.stringify(data),
                         credentials: 'include',
+                    })];
+                case 1:
+                    response = _a.sent();
+                    return [2 /*return*/, handleResponse(response)];
+            }
+        });
+    });
+}
+function patchData(url, data) {
+    return __awaiter(this, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fetch("".concat(BASE_URL).concat(url), {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                        credentials: 'include', // Include cookies (e.g., session or authentication token)
                     })];
                 case 1:
                     response = _a.sent();

@@ -25,3 +25,24 @@ export async function fetchMedicalHistory(
     throw error;
   }
 }
+
+// Function to populate the medical history section
+export async function populateMedicalHistory(patientId: number) {
+  const medicalHistoryContainer = document.getElementById('medical-history');
+  try {
+    const medicalHistory = await fetchMedicalHistory(patientId);
+    medicalHistoryContainer.innerHTML = medicalHistory
+      .map(
+        (entry) =>
+          `<div class="medical-history-card">
+            <p><strong>Condition:</strong> ${entry.diagnosis}</p>
+            <p><strong>Treatment:</strong> ${entry.treatment}</p>
+            <p><strong>Date:</strong> ${entry.date}</p>
+          </div>`,
+      )
+      .join('');
+  } catch (error) {
+    medicalHistoryContainer.innerHTML = '<p>Error loading medical history.</p>';
+    console.error(error);
+  }
+}

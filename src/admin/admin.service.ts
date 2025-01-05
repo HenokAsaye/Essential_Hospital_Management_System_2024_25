@@ -80,7 +80,7 @@ export class AdminService {
     try {
       const updatedRequest = await this.prisma.doctorRequest.update({
         where: { id: data.id },
-        data: { status: 'REJECTED' },
+        data: { status: requestStatus.REJECTED },
       });
   
       if (!updatedRequest) {

@@ -1,11 +1,9 @@
-import { fetchAppointments} from './appointment';
-import { fetchMedicalHistory } from './medicalHistory';
-
+import { fetchAppointments, populateAppointments } from './appointment';
+import { fetchMedicalHistory, populateMedicalHistory } from './medicalHistory';
 interface Appointment {
   id: number;
   date: string;
   doctorName: string;
-  
 }
 
 interface MedicalHistory {
@@ -37,3 +35,32 @@ export async function fetchDashboardData(
     throw error;
   }
 }
+
+// Function to get the patientId from the JWT token in cookies
+export async function getPatientIdFromToken(): Promise<number | null> {
+  try {
+    const response = await fetch('/auth/signup', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    return data.patientId; // Assuming the backend sends the patientId in the response
+  } catch (error) {
+    console.error('Error fetching patientId:', error);
+    return null;
+  }
+}
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', async () => {
+  const patientId = await getPatientIdFromToken();
+  if (patientId) {
+    await fetchDashboardData(patientId);
+    populateAppointments(patientId);
+    populateMedicalHistory(patientId);
+  } else {
+    console.error('Patient ID could not be retrieved');
+  }
+});

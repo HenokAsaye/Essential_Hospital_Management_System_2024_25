@@ -41,6 +41,20 @@ export async function putData(url: string, data: object) {
     });
     return handleResponse(response);    
 }
+
+export async function patchData(url: string, data: object) {
+  const response = await fetch(`${BASE_URL}${url}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+    credentials: 'include', // Include cookies (e.g., session or authentication token)
+  });
+  return handleResponse(response);
+}
+
+
 export async function deleteData(url: string) {
   const response = await fetch(`${BASE_URL}${url}`, {
     method: 'DELETE',

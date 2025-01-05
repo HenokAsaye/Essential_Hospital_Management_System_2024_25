@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchAppointments = fetchAppointments;
+exports.populateAppointments = populateAppointments;
 var api_helper_1 = require("../../utility/api-helper");
 // Fetch appointments for a specific patient
 function fetchAppointments(patientId) {
@@ -60,6 +61,36 @@ function fetchAppointments(patientId) {
                     console.error('Failed to fetch appointments:', error_1.message);
                     throw error_1;
                 case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+// Function to populate the appointments section
+function populateAppointments(patientId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var appointmentsContainer, appointments, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    appointmentsContainer = document.getElementById('appointments');
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, fetchAppointments(patientId)];
+                case 2:
+                    appointments = _a.sent();
+                    appointmentsContainer.innerHTML = appointments
+                        .map(function (appointment) {
+                        return "<div class=\"appointment-card\">\n            <p><strong>Date:</strong> ".concat(appointment.date, "</p>\n            <p><strong>Time:</strong> ").concat(appointment.time, "</p>\n            <p><strong>Doctor:</strong> ").concat(appointment.doctorName, "</p>\n          </div>");
+                    })
+                        .join('');
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_2 = _a.sent();
+                    appointmentsContainer.innerHTML = '<p>Error loading appointments.</p>';
+                    console.error(error_2);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     });

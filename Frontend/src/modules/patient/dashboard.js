@@ -36,59 +36,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchMedicalHistory = fetchMedicalHistory;
-exports.populateMedicalHistory = populateMedicalHistory;
-var api_helper_1 = require("../../utility/api-helper");
-// Fetch medical history for a specific patient
-function fetchMedicalHistory(patientId) {
+exports.fetchDashboardData = fetchDashboardData;
+var appointment_1 = require("./appointment");
+var medicalHistory_1 = require("./medicalHistory");
+// Fetch and combine all the data needed for the patient dashboard
+function fetchDashboardData(patientId) {
     return __awaiter(this, void 0, void 0, function () {
-        var response, error_1;
+        var appointments, medicalHistory, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, (0, api_helper_1.getData)("/patient/medical-history?patientId=".concat(patientId))];
+                    _a.trys.push([0, 3, , 4]);
+                    return [4 /*yield*/, (0, appointment_1.fetchAppointments)(patientId)];
                 case 1:
-                    response = _a.sent();
-                    return [2 /*return*/, response.map(function (entry) { return ({
-                            diagnosis: entry.diagnosis,
-                            treatment: entry.treatment,
-                            date: entry.date,
-                        }); })];
-                case 2:
-                    error_1 = _a.sent();
-                    console.error('Failed to fetch medical history:', error_1.message);
-                    throw error_1;
-                case 3: return [2 /*return*/];
-            }
-        });
-    });
-}
-// Function to populate the medical history section
-function populateMedicalHistory(patientId) {
-    return __awaiter(this, void 0, void 0, function () {
-        var medicalHistoryContainer, medicalHistory, error_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    medicalHistoryContainer = document.getElementById('medical-history');
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, fetchMedicalHistory(patientId)];
+                    appointments = _a.sent();
+                    return [4 /*yield*/, (0, medicalHistory_1.fetchMedicalHistory)(patientId)];
                 case 2:
                     medicalHistory = _a.sent();
-                    medicalHistoryContainer.innerHTML = medicalHistory
-                        .map(function (entry) {
-                        return "<div class=\"medical-history-card\">\n            <p><strong>Condition:</strong> ".concat(entry.diagnosis, "</p>\n            <p><strong>Treatment:</strong> ").concat(entry.treatment, "</p>\n            <p><strong>Date:</strong> ").concat(entry.date, "</p>\n          </div>");
-                    })
-                        .join('');
-                    return [3 /*break*/, 4];
+                    // Return combined data for the dashboard
+                    return [2 /*return*/, {
+                            appointments: appointments,
+                            medicalHistory: medicalHistory,
+                        }];
                 case 3:
-                    error_2 = _a.sent();
-                    medicalHistoryContainer.innerHTML = '<p>Error loading medical history.</p>';
-                    console.error(error_2);
-                    return [3 /*break*/, 4];
+                    error_1 = _a.sent();
+                    console.error('Error fetching dashboard data:', error_1.message);
+                    throw error_1;
                 case 4: return [2 /*return*/];
             }
         });

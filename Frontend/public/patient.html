@@ -3,59 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
   <title>Patient Dashboard</title>
   <link rel="stylesheet" href="../styles/bootstrap.css">
   <link rel="stylesheet" href="../styles/patient.css">
+  <style>
+    .section-box {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      color: #343a40;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
-  <!-- Header Section -->
-  <header class="header-section">
-    <div class="container text-center">
-      <h1>Welcome to Your Dashboard</h1>
-      <nav>
-        <ul class="d-flex justify-content-center list-unstyled">
-          <li><a href="#appointments-section" class="mx-3">Appointments</a></li>
-          <li><a href="#medical-history-section" class="mx-3">Medical History</a></li>
-        </ul>
-      </nav>
-    </div>
+  <header class="bg-primary text-white text-center py-3">
+    <h1>Patient Dashboard</h1>
   </header>
 
-  <!-- Appointments Section -->
-  <section id="appointments-section" class="container my-4 section-box">
-    <h2 class="text-center section-title">Upcoming Appointments</h2>
-    <div id="appointments-container" class="row justify-content-center">
-      <div class="col-md-8">
-        <div id="appointments" class="text-center"> 
-          <p>Loading appointments...</p>
+  <main class="container my-5">
+    <section id="appointments-section" class="container my-4 section-box">
+      <h2 class="text-center section-title">Upcoming Appointments</h2>
+      <div id="appointments-container" class="row justify-content-center">
+        <div class="col-md-8">
+          <div id="appointments" class="text-center">
+            <p>Loading appointments...</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Medical History Section -->
-  <section id="medical-history-section" class="container my-4 section-box">
-    <h2 class="text-center section-title">Medical History</h2>
-    <div id="medical-history-container" class="row justify-content-center">
-      <div class="col-md-8">
-        <div id="medical-history" class="text-center"> 
-          <p>Loading medical history...</p>
+    <section id="medical-history-section" class="container my-4 section-box">
+      <h2 class="text-center section-title">Medical History</h2>
+      <div id="medical-history-container" class="row justify-content-center">
+        <div class="col-md-8">
+          <div id="medical-history" class="text-center">
+            <p>Loading medical history...</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <!-- Footer Section -->
-  <footer class="footer-section text-center py-3">
-    <p>© 2025 Patient Management System. All Rights Reserved.</p>
+  <footer class="bg-light text-center py-3">
+    <p>&copy; 2025 Patient Dashboard. All Rights Reserved.</p>
   </footer>
 
-  <!-- JavaScript Files -->
+  <script src="../src/modules/patient/dashboard.js"></script>
   <script src="../src/modules/patient/appointment.js"></script>
   <script src="../src/modules/patient/medicalHistory.js"></script>
-  <script src="../src/scripts/patient.js"></script>
 </body>
 </html>
