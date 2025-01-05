@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles/bootstrap.css">
+  <title>Doctor Registration Request</title>
+
+  <style>
+    body {
+  background-image: url('../assets/images/doctor.bg.jpg'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #343a40;
+  font-family: Arial, sans-serif;
+}
+    .form-container {
+      max-width: 500px;
+      width: 100%;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div >
+    <h2 class="text-center mb-4">Doctor Registration Request</h2>
+
+    <!-- Doctor Registration Form -->
+    
+    <form id="doctorRegistrationForm" class="border p-4 rounded shadow bg-light  form-container">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter your full name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter your email address" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="text" class="form-control" id="phone" placeholder="Enter your phone number" required>
+      </div>
+      <div class="form-group">
+        <label for="specialization">Specialization</label>
+        <input type="text" class="form-control" id="specialization" placeholder="Enter your specialization" required>
+      </div>
+      <div class="form-group">
+        <label for="yearsOfExperience">Years of Experience</label>
+        <input type="number" class="form-control" id="yearsOfExperience" placeholder="Enter your years of experience" required>
+      </div>
+      
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top: 8px;">Submit Request</button>
+    </form>
+    
+  </div>
+
+  <script>
+    // Handle form submission
+    document.getElementById('doctorRegistrationForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      // Gather form data
+      const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        specialization: document.getElementById('specialization').value,
+        yearsOfExperience: document.getElementById('yearsOfExperience').value,
+        additionalDetails: document.getElementById('additionalDetails').value,
+      };
+
+      try {
+        // Submit the form data to the backend
+        const response = await fetch('/doctor-registration', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          alert('Your request has been submitted successfully. Await admin approval.');
+          document.getElementById('doctorRegistrationForm').reset();
+        } else {
+          alert('There was an error submitting your request. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error submitting request:', error);
+        alert('An unexpected error occurred. Please try again later.');
+      }
+    });
+  </script>
+
+</body>
+</html>

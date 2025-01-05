@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException, InternalServerErrorException } from 
 import { PrismaService } from '../../prisma/prisma.service';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
-import { AdminDto} from './dto/admin.dto';
+import { AdminDto } from './dto/admin.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
@@ -13,7 +13,8 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
   ) {}
-  async registerPatient(signupDto: SignupDto) {
+
+  async registerPatient(signupDto: SignupDto, res: Response) {
     try {
       const userExists = await this.prisma.user.findUnique({ where: { email: signupDto.email } });
       if (userExists) {
@@ -36,12 +37,21 @@ export class AuthService {
           userId: user.id,
         },
       });
+      const token = await this.jwtService.signAsync({ userId: user.id, email: user.email });
+      res.cookie('access_token', token, {
+        httpOnly: true,
+        maxAge: 3600000, 
+      });
       return { message: 'Patient registered successfully' };
     } catch (error) {
       console.error('Error in registerPatient:', error);
+      if (error instanceof UnauthorizedException) {
+        throw error; 
+      }
       throw new InternalServerErrorException('An error occurred while registering the patient.');
     }
   }
+
   async registerDoctor(signupDto: SignupDto) {
     try {
       const userExists = await this.prisma.user.findUnique({ where: { email: signupDto.email } });
@@ -66,7 +76,7 @@ export class AuthService {
       const payload = { sub: user.id, role: user.role };
       const accessToken = this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
-        expiresIn: '1h',  
+        expiresIn: '1h',
       });
       return {
         message: 'Doctor signup request submitted. Awaiting admin approval.',
@@ -74,60 +84,52 @@ export class AuthService {
       };
     } catch (error) {
       console.error('Error in registerDoctor:', error);
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
       throw new InternalServerErrorException('An error occurred while registering the doctor.');
     }
   }
+
   async login(loginDto: LoginDto, res: Response) {
     try {
       const { email, password } = loginDto;
-
       const user = await this.prisma.user.findUnique({ where: { email } });
       if (!user) {
         throw new UnauthorizedException('Invalid email or password.');
       }
-
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-         throw new UnauthorizedException('Invalid email or password.');
+        throw new UnauthorizedException('Invalid email or password.');
       }
       const payload = { sub: user.id, role: user.role };
       const accessToken = this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
       });
-      console.log(process.env.JWT_SECRET)
-
-      console.log('JWT_SECRET:', process.env.JWT_SECRET); 
-      console.log('Generated Access Token:', accessToken); 
-
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
         sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
       });
-
-      return {
-        message: 'Login Successful',
-      };
+      return { message: 'Login Successful' };
     } catch (error) {
       console.error('Error caught in login:', error);
-      console.error('Error name:', error.name);
-      console.error('Error instanceof UnauthorizedException:', error instanceof UnauthorizedException);
-    
       if (error instanceof UnauthorizedException) {
         throw error; 
       }
       throw new InternalServerErrorException('An error occurred while logging in.');
     }
   }
-  async firstAdmin(admindto:AdminDto){
+
+  async firstAdmin(adminDto: AdminDto) {
     try {
-      const {email,name} = admindto;
+      const { email, name } = adminDto;
       const adminEmail = process.env.ADMIN_EMAIL;
-      if(email !== adminEmail){
+      if (email !== adminEmail) {
         throw new UnauthorizedException('Invalid email or password.');
       }
       const AdminPassword = process.env.ADMIN_PASSWORD;
-      const hashedAdminPassword= await bcrypt.hash(AdminPassword,10)
+      const hashedAdminPassword = await bcrypt.hash(AdminPassword, 10);
       const user = await this.prisma.user.create({
         data: {
           name,
@@ -136,42 +138,39 @@ export class AuthService {
           role: 'Admin',
         },
       });
-      const admin = await this.prisma.admin.create({
+      await this.prisma.admin.create({
         data: {
           userId: user.id,
         },
-      })
+      });
       const payload = { sub: user.id, role: user.role };
       const accessToken = this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
       });
-      return {
-        message: 'Login Successful',
-      };
+      return { message: 'Admin created and login successful', accessToken };
     } catch (error) {
-      console.error('Error caught in login:', error);
-      console.error('Error name:', error.name);
-      console.error('Error instanceof UnauthorizedException:', error instanceof UnauthorizedException);
+      console.error('Error in firstAdmin:', error);
       if (error instanceof UnauthorizedException) {
-        throw error; 
+        throw error;
       }
-      throw new InternalServerErrorException('An error occurred while logging in.');
+      throw new InternalServerErrorException('An error occurred while creating the admin.');
     }
   }
-  async logInAdmin(AdminDto:AdminDto,res:Response){
+
+  async logInAdmin(adminDto: AdminDto, res: Response) {
     try {
-      const {email,password} = AdminDto
+      const { email, password } = adminDto;
       const user = await this.prisma.user.findUnique({
-        where:{email}
-      })
-      if(!user){
-        throw new  UnauthorizedException("You Are not Admin, Please Don't Try it Again.It has a Consequence!")
+        where: { email },
+      });
+      if (!user) {
+        throw new UnauthorizedException('You are not an admin, please don’t try again. It has consequences!');
       }
-      const isvalidPassword = await bcrypt.compare(password,user.password)
-      if(!isvalidPassword){
-        throw new UnauthorizedException("Invalid Password,Please Try Again")
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        throw new UnauthorizedException('Invalid password, please try again.');
       }
-      const payload = {sub:user.id,role:user.role}
+      const payload = { sub: user.id, role: user.role };
       const accessToken = this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
       });
@@ -180,9 +179,13 @@ export class AuthService {
         sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
       });
-      return "Logged in As Admin SuccessFully"
+      return { message: 'Logged in as Admin successfully' };
     } catch (error) {
-      throw new InternalServerErrorException("Server Error Exception!")
+      console.error('Error caught in logInAdmin:', error);
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Server error occurred while logging in as admin.');
     }
- }
+  }
 }

@@ -7,6 +7,8 @@ import {requestDto} from "./dto/requests.dto"
 import { HandleDoctorRequestDto } from './dto/handle-doctor-request.dto';
 import { SendAdminInviteDto } from './dto/send-user-email.dto';
 import { FindUserByEmailDto } from './dto/find-user-email.dto';
+import { sendInviteEmail } from 'src/Email/Email';
+
 
 @Injectable()
 export class AdminService {
@@ -41,13 +43,6 @@ export class AdminService {
       where: { id: data.userId },
     });
   }
-  
-  async sendAdminInvite(data: SendAdminInviteDto): Promise<string> {
-    const inviteCode = Math.random().toString(36).substring(2, 15);
-    await this.sendInviteEmail(data.email, inviteCode);
-    return `http://yourapp.com/register/admin?code=${inviteCode}`;
-  }
-
   async getAllRequest(){
     return this.prisma.doctorRequest.findMany(
       {where:{status:'PENDING'}}
@@ -83,7 +78,6 @@ export class AdminService {
   }
   async declineDoctorRequest(data: requestDto): Promise<{ message: string }> {
     try {
-      // Update the status of the doctor request to 'REJECTED'
       const updatedRequest = await this.prisma.doctorRequest.update({
         where: { id: data.id },
         data: { status: 'REJECTED' },
@@ -92,8 +86,6 @@ export class AdminService {
       if (!updatedRequest) {
         throw new UnauthorizedException("Doctor request not found!");
       }
-  
-      // Ensure the user exists
       const user = await this.prisma.user.findUnique({
         where: { id: updatedRequest.userId },
       });
@@ -101,13 +93,9 @@ export class AdminService {
       if (!user) {
         throw new UnauthorizedException("User not found");
       }
-  
-      // Delete the doctor request entry first to avoid foreign key constraint
       await this.prisma.doctorRequest.deleteMany({
         where: { userId: updatedRequest.userId },
       });
-  
-      // Now delete the user
       await this.prisma.user.delete({
         where: { id: updatedRequest.userId },
       });
@@ -118,32 +106,32 @@ export class AdminService {
       throw new Error(`Unable to process the doctor request: ${error.message}`);
     }
   }
+  async inviteAdmin(data: SendAdminInviteDto): Promise<string> {
+    const user = await this.prisma.user.findUnique({
+      where: { email: data.email },
+    });
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    const adminHomePageLink = `http://localhost:5000/admin.html`;  
+    const existingAdmin = await this.prisma.admin.findUnique({
+      where: { userId: user.id },
+    });
   
-  private async sendInviteEmail(
-    email: string,
-    inviteCode: string,
-  ): Promise<void> {
-    // This would be replaced with actual email sending logic using a library like nodemailer
-    // Example of sending an email using nodemailer:
-    /*
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'your-email@gmail.com',
-        pass: 'your-email-password',
+    if (existingAdmin) {
+      throw new UnauthorizedException('user already An Admin')
+    }
+    await sendInviteEmail(user.email, adminHomePageLink);
+    const updatedUser = await this.prisma.user.update({
+      where: { id: user.id },
+      data: { role: Role.Admin },
+    });
+    await this.prisma.admin.create({
+      data: {
+        userId: updatedUser.id,
       },
     });
-
-    await transporter.sendMail({
-      from: 'your-email@gmail.com',
-      to: email,
-      subject: 'Admin Invitation',
-      text: `You are invited to become an admin. Use this link to complete your registration: 
-             http://yourapp.com/register/admin?code=${inviteCode}`,
-    });
-    */
-  
-    console.log(`Sending invitation to ${email} with code ${inviteCode}`);
+    return `Admin invite sent! The user can access the admin page at ${adminHomePageLink}`;
   }
   async findUserByEmail(data: FindUserByEmailDto): Promise<User | null> {
     return this.prisma.user.findUnique({
