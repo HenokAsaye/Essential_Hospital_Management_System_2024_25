@@ -13,7 +13,7 @@ export class AuthController {
   @Post('signup')
   async signup(@Body() signupDto: SignupDto, @Res() res: Response) {
     try {
-      const result = await this.authService.registerPatient(signupDto);
+      const result = await this.authService.registerPatient(signupDto,res);
       return res.status(HttpStatus.CREATED).json({
         message: 'Signup successful',
         data: result,

@@ -13,7 +13,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
   ) {}
-  async registerPatient(signupDto: SignupDto) {
+  async registerPatient(signupDto: SignupDto, res: Response) {
     try {
       const userExists = await this.prisma.user.findUnique({ where: { email: signupDto.email } });
       if (userExists) {
@@ -35,6 +35,11 @@ export class AuthService {
         data: {
           userId: user.id,
         },
+      });
+      const token = await this.jwtService.signAsync({ userId: user.id, email: user.email });
+      res.cookie('access_token', token, {
+        httpOnly: true,    
+        maxAge: 3600000,  
       });
       return { message: 'Patient registered successfully' };
     } catch (error) {

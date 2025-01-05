@@ -10,8 +10,6 @@ export function showNotification(message: string, type: 'success' | 'error') {
   document.body.appendChild(notificationContainer);
   setTimeout(() => notificationContainer.remove(), 3000);
 }
-
-
 function initFormToggling() {
   const showLoginLink = document.getElementById('showLogin');
   const showRegisterLink = document.getElementById('showRegister');
@@ -25,7 +23,6 @@ function initFormToggling() {
       loginFormContainer.style.display = 'block';
     });
   }
-
   if (showRegisterLink && loginFormContainer && registerFormContainer) {
     showRegisterLink.addEventListener('click', (e) => {
       e.preventDefault();

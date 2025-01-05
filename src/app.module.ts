@@ -29,15 +29,18 @@ import { PrismaModule } from '../prisma/prisma.module';
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(JwtAuthMiddleware)
-      .exclude(
-        { path: '/auth/login', method: RequestMethod.POST },
-        { path: '/auth/signup', method: RequestMethod.POST},
-        { path: '/auth/signupdoctor', method: RequestMethod.POST },
-        {path:   '/auth/firstadmin' , method:RequestMethod.POST},
-        {path:   'auth/loginadmin' , method:RequestMethod.POST}
-      )
-      .forRoutes('*');
+  .apply(JwtAuthMiddleware)
+  .exclude(
+    { path: '/auth/login', method: RequestMethod.POST },
+    { path: '/auth/signup', method: RequestMethod.POST },
+    { path: '/auth/signupdoctor', method: RequestMethod.POST },
+    { path: '/auth/firstadmin', method: RequestMethod.POST },
+    { path: '/auth/loginadmin', method: RequestMethod.POST },
+    { path: '/index.html', method: RequestMethod.GET }, // Exclude index.html
+    { path: '/', method: RequestMethod.GET }, // Exclude root
+    { path: '(.*)', method: RequestMethod.GET } // Exclude all static files
+  )
+  .forRoutes('*');
   }
 }
 
