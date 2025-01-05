@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&family=Roboto:ital,
+  wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../styles/admin.css">
+  <link rel="stylesheet" href="../styles/bootstrap.css">
+</head>
+<body>
+  <header class="header">
+    <div class="admin-title">Admin</div>
+  </header>
+  <main class="main-content">
+    <h2>Admin Dashboard</h2>
+    <section class="user-management">
+      <h3>User Management</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dr. Rodas Hailu</td>
+            <td>Doctor</td>
+            <td>rodas20012@gmail.com</td>
+            <td>
+              <button>Edit</button>
+              <button>Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Tsion Tesfaye</td>
+            <td>patient</td>
+            <td>tsion2004@gmail.com</td>
+            <td>
+              <button>Edit</button>
+              <button>Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="approvals">
+      <h3>Pending Approvals</h3>
+      <div class="approval-item">
+        <p>Dr. Abriham - abriham1212@gmail.com</p>
+        <button>Approve</button>
+        <button>Reject</button>
+      </div>
+    </section>
+    <section class="invitations">
+      <h3>Send Invitations</h3>
+      <form>
+        <input type="email" placeholder="Enter email address" required>
+        <button type="submit">Send Invitation</button>
+      </form>
+    </section>
+  </main>
+  <footer class="footer">
+    <p>&copy; 2025 Patient Management System. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>
