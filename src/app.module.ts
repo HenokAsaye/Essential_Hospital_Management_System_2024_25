@@ -23,8 +23,6 @@ import { join } from 'path';
     DoctorModule,
     PrismaModule,
     ConfigModule,
-    
-    // Serve static files from the 'public' folder in the frontend
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'Frontend', 'public'),
     }),
@@ -42,9 +40,9 @@ export class AppModule {
         { path: '/auth/signupdoctor', method: RequestMethod.POST },
         { path: '/auth/firstadmin', method: RequestMethod.POST },
         { path: '/auth/loginadmin', method: RequestMethod.POST },
-        { path: '/index.html', method: RequestMethod.GET }, // Exclude index.html
-        { path: '/', method: RequestMethod.GET }, // Exclude root
-        { path: '(.*)', method: RequestMethod.GET } // Exclude all static files
+        { path: '/index.html', method: RequestMethod.GET }, 
+        { path: '/', method: RequestMethod.GET }, 
+        { path: '(.*)', method: RequestMethod.GET } 
       )
       .forRoutes('*');
   }
