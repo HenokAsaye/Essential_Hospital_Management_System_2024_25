@@ -7,14 +7,10 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-
-  // Point to the exact path where the static files are located
   app.useStaticAssets(join(__dirname, '..', '..', 'Frontend', 'public')); 
 
-  console.log('Static files served from:', join(__dirname, '..', '..', 'Frontend', 'public'));
-
   app.enableCors({
-    origin: `http://localhost:${process.env.PORT}`,
+    origin: 'http://localhost:5000', 
     credentials: true,
   });
 
@@ -25,6 +21,9 @@ async function bootstrap() {
   );
 
   app.use(cookieParser());
-  await app.listen(process.env.PORT || 5000);
+  
+  const port = process.env.PORT || 5000;
+  await app.listen(port);
+  console.log(`Application is running on http://localhost:${port}`);
 }
 bootstrap();
