@@ -21,7 +21,11 @@ export async function fetchMedicalHistory(
       date: entry.date,
     }));
   } catch (error) {
-    console.error('Failed to fetch medical history:', error.message);
+    if (error instanceof Error) {
+      console.error('Failed to fetch medical history:', error.message);
+    } else {
+      console.error('Failed to fetch medical history:', error);
+    }
     throw error;
   }
 }
@@ -31,18 +35,24 @@ export async function populateMedicalHistory(patientId: number) {
   const medicalHistoryContainer = document.getElementById('medical-history');
   try {
     const medicalHistory = await fetchMedicalHistory(patientId);
-    medicalHistoryContainer.innerHTML = medicalHistory
-      .map(
-        (entry) =>
-          `<div class="medical-history-card">
-            <p><strong>Condition:</strong> ${entry.diagnosis}</p>
-            <p><strong>Treatment:</strong> ${entry.treatment}</p>
-            <p><strong>Date:</strong> ${entry.date}</p>
-          </div>`,
-      )
-      .join('');
+    if (medicalHistoryContainer) {
+      medicalHistoryContainer.innerHTML = medicalHistory
+        .map(
+          (entry) =>
+            `<div class="medical-history-card">
+              <p><strong>Condition:</strong> ${entry.diagnosis}</p>
+              <p><strong>Treatment:</strong> ${entry.treatment}</p>
+              <p><strong>Date:</strong> ${entry.date}</p>
+            </div>`,
+        )
+        .join('');
+    } else {
+      console.error('Medical history container not found.');
+    }
   } catch (error) {
-    medicalHistoryContainer.innerHTML = '<p>Error loading medical history.</p>';
+    if (medicalHistoryContainer) {
+      medicalHistoryContainer.innerHTML = '<p>Error loading medical history.</p>';
+    }
     console.error(error);
   }
 }

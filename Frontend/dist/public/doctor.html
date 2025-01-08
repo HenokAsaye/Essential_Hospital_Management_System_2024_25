@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Dashboard</title>
+  <link rel="stylesheet" href="./styles/bootstrap.css">
+  <link rel="stylesheet" href="./styles/doctor.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header bg-primary text-white p-3 d-flex justify-content-between align-items-center">
+    <h1 class="doctor-title">Doctor Dashboard</h1>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container my-4">
+    <!-- Search Patients Section -->
+    <section id="search-patients" class="mb-5 p-4 shadow-lg rounded">
+      <h2 class="text-primary mb-4">Search Patient Records</h2>
+      <form id="search-form" class="d-flex mb-3">
+        <input type="text" id="search-input" class="form-control me-2" placeholder="Enter patient name or ID">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+      <table class="table table-bordered table-striped" id="results-table" style="display: none;">
+        <thead class="table-primary">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamic Rows Inserted Here -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Patient Medical History Section -->
+    <section id="patient-history" class="mb-5 p-4 shadow-lg rounded" style="display: none;">
+      <h2 class="text-primary mb-4">Manage Medical History</h2>
+      <div id="history-container" class="mb-4">
+        <!-- Dynamic Patient History Data Inserted Here -->
+      </div>
+      <form id="history-form" class="row g-3">
+        <div class="col-md-4">
+          <label for="diagnosis" class="form-label">Diagnosis</label>
+          <input type="text" id="diagnosis" class="form-control" placeholder="Enter Diagnosis">
+        </div>
+        <div class="col-md-4">
+          <label for="note" class="form-label">Note</label>
+          <input type="text" id="note" class="form-control" placeholder="Enter Note">
+        </div>
+        <div class="col-md-4">
+          <label for="date" class="form-label">Date</label>
+          <input type="date" id="date" class="form-control">
+        </div>
+        <div class="col-md-12">
+          <button type="submit" class="btn btn-primary">Update History</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Schedule Management Section -->
+    <section id="schedule-management" class="mb-5 p-4 shadow-lg rounded">
+      <h2 class="text-primary mb-4">Schedule Appointment</h2>
+      <form id="schedule-form" class="row g-3">
+        <div class="col-md-3">
+          <label for="doctor-id" class="form-label">Doctor ID</label>
+          <input type="text" id="doctor-id" class="form-control" placeholder="Enter Doctor ID">
+        </div>
+        <div class="col-md-3">
+          <label for="patient-name" class="form-label">Patient Name</label>
+          <input type="text" id="patient-name" class="form-control" placeholder="Enter Patient Name">
+        </div>
+        <div class="col-md-3">
+          <label for="date" class="form-label">Date</label>
+          <input type="date" id="date" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label for="time" class="form-label">Time</label>
+          <input type="time" id="time" class="form-control">
+        </div>
+        <div class="col-md-12">
+          <button type="submit" class="btn btn-primary">Schedule Appointment</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer bg-primary text-white text-center py-3">
+    &copy; 2025 Patient Management System. All Rights Reserved.
+  </footer>
+
+  <script src="../modules/doctor/history.js"></script>
+  <script src="../modules/doctor/search.js"></script>
+  <script src="../modules/doctor/schedule.js"></script>
+</body>
+</html>

@@ -23,7 +23,7 @@ export async function fetchAppointments(
       doctorName: appointment.Doctor.name,
     }));
   } catch (error) {
-    console.error('Failed to fetch appointments:', error.message);
+    console.error('Failed to fetch appointments:');
     throw error;
   }
 }
@@ -33,18 +33,24 @@ export async function populateAppointments(patientId: number) {
   const appointmentsContainer = document.getElementById('appointments');
   try {
     const appointments = await fetchAppointments(patientId);
-    appointmentsContainer.innerHTML = appointments
-      .map(
-        (appointment) =>
-          `<div class="appointment-card">
-            <p><strong>Date:</strong> ${appointment.date}</p>
-            <p><strong>Time:</strong> ${appointment.time}</p>
-            <p><strong>Doctor:</strong> ${appointment.doctorName}</p>
-          </div>`,
-      )
-      .join('');
+    if (appointmentsContainer) {
+      appointmentsContainer.innerHTML = appointments
+        .map(
+          (appointment) =>
+            `<div class="appointment-card">
+              <p><strong>Date:</strong> ${appointment.date}</p>
+              <p><strong>Time:</strong> ${appointment.time}</p>
+              <p><strong>Doctor:</strong> ${appointment.doctorName}</p>
+            </div>`,
+        )
+        .join('');
+    } else {
+      console.error('Appointments container not found');
+    }
   } catch (error) {
-    appointmentsContainer.innerHTML = '<p>Error loading appointments.</p>';
+    if (appointmentsContainer) {
+      appointmentsContainer.innerHTML = '<p>Error loading appointments.</p>';
+    }
     console.error(error);
   }
 }
