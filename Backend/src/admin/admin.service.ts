@@ -39,15 +39,39 @@ export class AdminService {
     });
   }
   async deleteUser(data: DeleteUserDto): Promise<User> {
+    // First, delete any related doctor requests that reference this user
+    await this.prisma.doctorRequest.deleteMany({
+      where: { userId: data.userId },
+    });
+  
+    // Then, delete any related doctor and patient records
+    await this.prisma.doctor.deleteMany({
+      where: { userId: data.userId },
+    });
+    await this.prisma.patient.deleteMany({
+      where: { userId: data.userId },
+    });
+  
+    // Finally, delete the user itself
     return this.prisma.user.delete({
       where: { id: data.userId },
     });
   }
-  async getAllRequest(){
-    return this.prisma.doctorRequest.findMany(
-      {where:{status:'PENDING'}}
-    )
+  
+  async getAllRequest() {
+    return this.prisma.doctorRequest.findMany({
+      where: { status: 'PENDING' },
+      include: {
+        User: {
+          select: {
+            name: true,  
+            email: true, //
+          }
+        }
+      }
+    });
   }
+  
   async acceptDoctorRequest(data: requestDto): Promise<void> {
     try {
       const updatedRequest = await this.prisma.doctorRequest.update({
@@ -76,6 +100,8 @@ export class AdminService {
       throw new Error(`Unable to process the doctor request: ${error.message}`);
     }
   }
+
+
   async declineDoctorRequest(data: requestDto): Promise<{ message: string }> {
     try {
       const updatedRequest = await this.prisma.doctorRequest.update({

@@ -142,15 +142,12 @@ export class AuthService {
 
       // Return simplified response
       return {
-        message: 'Login Successful',
-        data: {
           id: user.id,
           name: user.name,
           email: user.email,
           role: user.role,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
-        },
       };
     } catch (error) {
       console.error('Error caught in login:', error);

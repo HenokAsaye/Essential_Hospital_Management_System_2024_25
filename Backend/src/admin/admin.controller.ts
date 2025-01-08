@@ -58,18 +58,18 @@ export class AdminController {
     }
   }
   @Delete('declineRequest')
-  async declineDoctorRequest(@Body() data:requestDto): Promise<{message: String}>{
-    try {
-      await this.adminService.declineDoctorRequest(data);
-      return {message:'Doctor request Declined Successfully'}
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          error: error.message,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+  async declineDoctorRequest(@Body() data: requestDto): Promise<{ message: string }> {
+      try {
+          await this.adminService.declineDoctorRequest(data);
+          return { message: 'Doctor request declined successfully' };
+      } catch (error) {
+          throw new HttpException(
+              {
+                  status: HttpStatus.BAD_REQUEST,
+                  error: error.message,
+              },
+              HttpStatus.BAD_REQUEST,
+          );
+      }
   }
 }
