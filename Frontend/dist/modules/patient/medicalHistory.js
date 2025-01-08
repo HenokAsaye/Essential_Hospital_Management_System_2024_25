@@ -8,16 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { getData } from '../../utility/api-helper.js';
-
-// Fetch medical history for a specific patient
 export function fetchMedicalHistory(patientId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const response = yield getData(`/patient/medical-history?patientId=${patientId}`);
-
-            // Access the medicalHistory array from the response object
-            const medicalHistory = response.medicalHistory;
-
+            const response = yield getData(`/patient/medical-history`);
+            const medicalHistory = response.medicalHistory || []; 
             // Ensure the response is an array before calling map
             if (Array.isArray(medicalHistory)) {
                 return medicalHistory.map((entry) => ({
@@ -39,7 +34,6 @@ export function fetchMedicalHistory(patientId) {
         }
     });
 }
-
 // Function to populate the medical history section
 export function populateMedicalHistory(patientId) {
     return __awaiter(this, void 0, void 0, function* () {

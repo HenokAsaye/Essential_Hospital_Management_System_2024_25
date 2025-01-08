@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { getData } from '../../utility/api-helper.js';
-import { initializeHistory } from './history';
+import { initializeHistory } from './history.js';
 const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('search-input');
 const resultsTable = document.getElementById('results-table');

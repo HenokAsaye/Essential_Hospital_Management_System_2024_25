@@ -74,18 +74,17 @@ export function patchData(url, data) {
         return handleResponse(response);
     });
 }
-export function deleteData(url) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch(`${BASE_URL}${url}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-        });
-        return handleResponse(response);
-    });
+export function deleteData(url, data) {
+    return fetch(`${BASE_URL}${url}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        credentials: 'include',
+    }).then(handleResponse);
 }
+
 export function logout() {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch(`${BASE_URL}/auth/logout`, {

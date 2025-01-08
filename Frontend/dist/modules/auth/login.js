@@ -31,9 +31,10 @@ export function initAuth() {
                     body: JSON.stringify({ email, password }),
                 });
                 const result = yield response.json();
+
                 if (response.ok) {
                     showNotification(result.message || 'Login successful', 'success');
-                    navigateToPage(result.user.role); 
+                    navigateToPage(result.data.role); 
                 }
                 else {
                     showNotification(result.message || 'Login failed. Please try again.', 'error');

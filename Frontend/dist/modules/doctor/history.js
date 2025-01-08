@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { getData, postData } from '../../utility/api-helper.js';
-// Fetch patient history by patient ID
 export function fetchPatientHistory(patientId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -23,7 +22,6 @@ export function fetchPatientHistory(patientId) {
         }
     });
 }
-// Update patient medical history
 export function updatePatientHistory(patientId, diagnosis, note, date) {
     return __awaiter(this, void 0, void 0, function* () {
         const medicalDto = { diagnosis, note, date };
@@ -38,15 +36,13 @@ export function updatePatientHistory(patientId, diagnosis, note, date) {
         }
     });
 }
-// Initialize patient history display
+
 export function initializeHistory(patientId) {
     const historyContainer = document.getElementById('history-container');
     const historyForm = document.getElementById('history-form');
-    // Fetch and display patient history
     fetchPatientHistory(patientId).then((patient) => {
         if (!patient || !historyContainer)
             return;
-        // Display patient history in the container
         const historyHtml = patient.medicalHistory
             .map((entry) => `
       <div class="history-entry">
@@ -58,7 +54,6 @@ export function initializeHistory(patientId) {
             .join('');
         historyContainer.innerHTML = historyHtml;
     });
-    // Add event listener to the form for updating history
     if (historyForm) {
         historyForm.addEventListener('submit', (event) => __awaiter(this, void 0, void 0, function* () {
             event.preventDefault();
