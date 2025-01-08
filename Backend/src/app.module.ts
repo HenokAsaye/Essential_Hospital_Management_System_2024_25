@@ -60,8 +60,6 @@ export class AppModule {
         { path: '/auth/firstadmin', method: RequestMethod.POST },
         { path: '/auth/loginadmin', method: RequestMethod.POST },
         { path: '/index.html', method: RequestMethod.GET },
-        { path: '/', method: RequestMethod.GET },
-        { path: '(.*)', method: RequestMethod.GET },
       )
       .forRoutes('*');
   }

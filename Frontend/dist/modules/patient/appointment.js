@@ -9,10 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { getData } from '../../utility/api-helper.js';
 // Fetch appointments for a specific patient
-export function fetchAppointments(patientId) {
+export function fetchAppointments() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const response = yield getData(`/patient/appointments?patientId=${patientId}`);
+            const response = yield getData(`/patient/appointments`);
+            console.log(response)
             return response.map((appointment) => ({
                 id: appointment.id,
                 date: appointment.date,

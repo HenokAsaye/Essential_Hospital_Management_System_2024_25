@@ -34,24 +34,18 @@ export class AuthService {
           contact: signupDto.contact,
         },
       });
-
-      // Creating related patient entry
       await this.prisma.patient.create({
         data: {
           userId: user.id,
         },
       });
-
-      // Generate token
       const token = await this.jwtService.signAsync({ userId: user.id, email: user.email });
-
-      // Setting the token in a cookie
       res.cookie('access_token', token, {
-        httpOnly: true,
-        maxAge: 3600000, // Token expiration time (1 hour)
-      });
-
-      // Return simplified response
+        httpOnly: false,
+        maxAge: 3600000, 
+        secure: false, 
+        path: '/' 
+    });
       return {
           id: user.id,
           name: user.name,
@@ -60,6 +54,7 @@ export class AuthService {
           role: user.role,
           age: user.age,
           gender: user.gender,
+          token,
           contact: user.contact,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
@@ -134,13 +129,13 @@ export class AuthService {
         throw new UnauthorizedException('Invalid email or password.');
       }
 
-      const payload = { sub: user.id, role: user.role };
+      const payload = {userId: user.id, role: user.role };
       const accessToken = this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
       });
 
       res.cookie('accessToken', accessToken, {
-        httpOnly: true,
+        httpOnly: false,
         sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
       });
@@ -243,8 +238,6 @@ export class AuthService {
         sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
       });
-
-      // Return simplified response
       return {
         message: 'Logged in as Admin successfully',
         data: {

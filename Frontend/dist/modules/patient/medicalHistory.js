@@ -8,28 +8,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { getData } from '../../utility/api-helper.js';
+
 // Fetch medical history for a specific patient
 export function fetchMedicalHistory(patientId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const response = yield getData(`/patient/medical-history?patientId=${patientId}`);
-            return response.map((entry) => ({
-                diagnosis: entry.diagnosis,
-                treatment: entry.treatment,
-                date: entry.date,
-            }));
-        }
-        catch (error) {
+
+            // Access the medicalHistory array from the response object
+            const medicalHistory = response.medicalHistory;
+
+            // Ensure the response is an array before calling map
+            if (Array.isArray(medicalHistory)) {
+                return medicalHistory.map((entry) => ({
+                    diagnosis: entry.diagnosis,
+                    treatment: entry.note, // Assuming 'note' corresponds to treatment
+                    date: entry.date,
+                }));
+            } else {
+                console.error('Expected an array but got:', medicalHistory);
+                throw new Error('Invalid response format');
+            }
+        } catch (error) {
             if (error instanceof Error) {
                 console.error('Failed to fetch medical history:', error.message);
-            }
-            else {
+            } else {
                 console.error('Failed to fetch medical history:', error);
             }
             throw error;
         }
     });
 }
+
 // Function to populate the medical history section
 export function populateMedicalHistory(patientId) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -37,19 +47,21 @@ export function populateMedicalHistory(patientId) {
         try {
             const medicalHistory = yield fetchMedicalHistory(patientId);
             if (medicalHistoryContainer) {
-                medicalHistoryContainer.innerHTML = medicalHistory
-                    .map((entry) => `<div class="medical-history-card">
-              <p><strong>Condition:</strong> ${entry.diagnosis}</p>
-              <p><strong>Treatment:</strong> ${entry.treatment}</p>
-              <p><strong>Date:</strong> ${entry.date}</p>
-            </div>`)
-                    .join('');
-            }
-            else {
+                if (medicalHistory.length > 0) {
+                    medicalHistoryContainer.innerHTML = medicalHistory
+                        .map((entry) => `<div class="medical-history-card">
+                            <p><strong>Condition:</strong> ${entry.diagnosis}</p>
+                            <p><strong>Treatment:</strong> ${entry.treatment}</p>
+                            <p><strong>Date:</strong> ${entry.date}</p>
+                        </div>`)
+                        .join('');
+                } else {
+                    medicalHistoryContainer.innerHTML = '<p>No medical history available.</p>';
+                }
+            } else {
                 console.error('Medical history container not found.');
             }
-        }
-        catch (error) {
+        } catch (error) {
             if (medicalHistoryContainer) {
                 medicalHistoryContainer.innerHTML = '<p>Error loading medical history.</p>';
             }

@@ -6,7 +6,8 @@ export class PatientController {
   constructor(private readonly patientService: PatientService) {}
   @Get('appointments')
   async getAppointments(@Req() req) {
-    const userId = req.user?.sub; 
+    console.log(req.user)
+    const userId = req.user?.userId; 
     if (!userId) {
       throw new Error('User not authenticated or user ID is missing');
     }
@@ -14,7 +15,7 @@ export class PatientController {
   }
   @Get('medical-history')
   async getMedicalHistory(@Req() req) {
-    const userId = req.user?.sub;
+    const userId = req.user?.userId;
     if (!userId) {
       throw new Error('User not authenticated or user ID is missing');
     }

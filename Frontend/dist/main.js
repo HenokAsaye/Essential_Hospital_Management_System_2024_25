@@ -1,5 +1,6 @@
 import { initAuth } from './modules/auth/login.js';
 import { initRegister } from './modules/auth/register.js';
+
 export function showNotification(message, type) {
     const notificationContainer = document.createElement('div');
     notificationContainer.classList.add('notification', type);
@@ -7,11 +8,18 @@ export function showNotification(message, type) {
     document.body.appendChild(notificationContainer);
     setTimeout(() => notificationContainer.remove(), 3000);
 }
+
+// Call initFormToggling on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    initFormToggling();
+});
+
 function initFormToggling() {
     const showLoginLink = document.getElementById('showLogin');
     const showRegisterLink = document.getElementById('showRegister');
     const registerFormContainer = document.getElementById('auth-forms');
     const loginFormContainer = document.getElementById('login-forms');
+
     if (showLoginLink && loginFormContainer && registerFormContainer) {
         showLoginLink.addEventListener('click', (e) => {
             e.preventDefault();
@@ -19,6 +27,7 @@ function initFormToggling() {
             loginFormContainer.style.display = 'block';
         });
     }
+
     if (showRegisterLink && loginFormContainer && registerFormContainer) {
         showRegisterLink.addEventListener('click', (e) => {
             e.preventDefault();
@@ -26,6 +35,8 @@ function initFormToggling() {
             registerFormContainer.style.display = 'block';
         });
     }
+
+    // Call initRegister to attach the register form logic
     initRegister();
     initAuth();
 }

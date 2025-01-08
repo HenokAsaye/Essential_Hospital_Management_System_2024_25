@@ -33,7 +33,7 @@ export function initAuth() {
                 const result = yield response.json();
                 if (response.ok) {
                     showNotification(result.message || 'Login successful', 'success');
-                    navigateToPage(result.user.role); // Navigate based on role
+                    navigateToPage(result.user.role); 
                 }
                 else {
                     showNotification(result.message || 'Login failed. Please try again.', 'error');

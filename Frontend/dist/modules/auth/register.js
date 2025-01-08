@@ -1,37 +1,29 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-import { showNotification } from '../../main.js';
+import { showNotification } from "../../main.js";
 import { navigateToPage } from '../../router.js';
+
 export function initRegister() {
-    console.log('Register function triggered');
+    console.log('Register function triggered');  // Make sure this log appears
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
-        registerForm.addEventListener('submit', (event) => __awaiter(this, void 0, void 0, function* () {
+        console.log('Register form found');  // Check if the form is found
+        registerForm.addEventListener('submit', async (event) => {
             event.preventDefault();
+            console.log('Form submission triggered');  // Log here to confirm submission
             const name = document.getElementById('name').value;
-            const email = document.getElementById('email')
-                .value;
-            const password = document.getElementById('password')
-                .value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
             const role = document.getElementById('role').value;
-            const age = document.getElementById('age').value;
-            const contact = document.getElementById('contact')
-                .value;
-            const gender = document.getElementById('gender')
-                .value;
+            const age = parseInt(document.getElementById('age').value);  // Convert to integer
+            const contact = document.getElementById('contact').value;
+            const gender = document.getElementById('gender').value;
+
             if (!name || !email || !password || !role || !contact || !gender) {
                 showNotification('Please fill in all fields.', 'error');
                 return;
             }
+
             try {
-                const response = yield fetch('/auth/signup', {
+                const response = await fetch('/auth/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -47,19 +39,25 @@ export function initRegister() {
                         gender,
                     }),
                 });
-                const result = yield response.json();
-                console.log(result.user.role);
+
+                console.log('Response Status:', response.status);  // Log response status
+                const result = await response.json();
+                console.log('Response Body:', result);  // Log response body
+
                 if (response.ok) {
+                    const role = result.data.role.toLowerCase();  // Convert role to lowercase
+                    console.log('Navigating to role:', role);  // Log the role for navigation
                     showNotification(result.message || 'Registration successful', 'success');
-                    navigateToPage(role); 
-                }
-                else {
+                    navigateToPage(role);
+                } else {
                     showNotification(result.message || 'Registration failed. Please try again.', 'error');
                 }
-            }
-            catch (error) {
+            } catch (error) {
                 showNotification('An error occurred. Please try again.', 'error');
+                console.error(error);  // Log the error to check what went wrong
             }
-        }));
+        });
+    } else {
+        console.log('Register form not found');  // This will log if the form element isn't found
     }
 }
