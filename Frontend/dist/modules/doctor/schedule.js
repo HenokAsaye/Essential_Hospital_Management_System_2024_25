@@ -22,15 +22,10 @@ export function scheduleAppointment(doctorId, patientId, date, time) {
 
         try {
             console.log('Sending appointment request with data:', scheduleDto);
-            
-            // Call postData, which already handles the response
             const responseData = yield postData('/doctor/schedule-appointment', scheduleDto);
-            
-            // Assuming successful response, log it
             console.log('Appointment response:', responseData);
             alert('Appointment scheduled successfully!');
         } catch (error) {
-            // Handle errors here
             console.error('Error scheduling appointment:', error);
             alert(`Failed to schedule appointment: ${error.message || error}`);
         }
