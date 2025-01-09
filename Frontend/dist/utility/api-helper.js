@@ -8,7 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 const BASE_URL = 'http://localhost:5000';
+
 function handleResponse(response) {
     return __awaiter(this, void 0, void 0, function* () {
         if (response.ok) {
@@ -17,25 +19,35 @@ function handleResponse(response) {
         try {
             const errorData = yield response.json();
             throw new Error(errorData.message || 'Something went wrong');
-        }
-        catch (e) {
+        } catch (e) {
             throw new Error('Unexpected response from server');
         }
     });
 }
-export function postData(url, data) {
+
+export function postData(url = '', data = {}) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch(`${BASE_URL}${url}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-            credentials: 'include',
-        });
-        return handleResponse(response);
+        try {
+            console.log('Sending request to:', url);
+            console.log('With data:', data);
+
+            const response = yield fetch(`${BASE_URL}${url}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+                credentials: 'include', 
+            });
+
+            return yield handleResponse(response);
+        } catch (error) {
+            console.error('Error in postData:', error);
+            throw error;
+        }
     });
 }
+
 export function getData(url) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch(`${BASE_URL}${url}`, {
@@ -48,6 +60,7 @@ export function getData(url) {
         return handleResponse(response);
     });
 }
+
 export function putData(url, data) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch(`${BASE_URL}${url}`, {
@@ -84,7 +97,6 @@ export function deleteData(url, data) {
         credentials: 'include',
     }).then(handleResponse);
 }
-
 export function logout() {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch(`${BASE_URL}/auth/logout`, {
@@ -94,8 +106,7 @@ export function logout() {
         const data = yield response.json();
         if (response.ok) {
             return data.message;
-        }
-        else {
+        } else {
             throw new Error(data.message || 'Logout failed');
         }
     });

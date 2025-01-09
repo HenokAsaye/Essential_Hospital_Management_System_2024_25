@@ -57,7 +57,7 @@
           <input type="date" id="date" class="form-control">
         </div>
         <div class="col-md-12">
-          <button type="submit" class="btn btn-primary">Update History</button>
+          <button type="submit" id="update-button" class="btn btn-primary">Update History</button>
         </div>
       </form>
     </section>
@@ -71,12 +71,12 @@
           <input type="text" id="doctor-id" class="form-control" placeholder="Enter Doctor ID">
         </div>
         <div class="col-md-3">
-          <label for="patient-name" class="form-label">Patient Name</label>
-          <input type="text" id="patient-name" class="form-control" placeholder="Enter Patient Name">
+          <label for="patient-id" class="form-label">Patient ID</label>
+          <input type="text" id="patient-id" class="form-control" placeholder="Enter Patient ID">
         </div>
         <div class="col-md-3">
-          <label for="date" class="form-label">Date</label>
-          <input type="date" id="date" class="form-control">
+          <label for="schedule-date" class="form-label">Date</label>
+          <input type="date" id="schedule-date" class="form-control">
         </div>
         <div class="col-md-3">
           <label for="time" class="form-label">Time</label>
@@ -93,9 +93,9 @@
   <footer class="footer bg-primary text-white text-center py-3">
     &copy; 2025 Patient Management System. All Rights Reserved.
   </footer>
-
+  <script type="module" src="../modules/doctor/schedule.js"></script>
   <script  type="module"  src="../modules/doctor/history.js"></script>
   <script type="module" src="../modules/doctor/search.js"></script>
-  <script type="module" src="../modules/doctor/schedule.js"></script>
+
 </body>
 </html>

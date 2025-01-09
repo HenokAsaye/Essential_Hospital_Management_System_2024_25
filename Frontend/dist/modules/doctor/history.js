@@ -22,7 +22,7 @@ export function fetchPatientHistory(patientId) {
         }
     });
 }
-export function updatePatientHistory(patientId, diagnosis, note, date) {
+export function updatePatientHistory(name, diagnosis, note, date) {
     return __awaiter(this, void 0, void 0, function* () {
         const medicalDto = { diagnosis, note, date };
         try {

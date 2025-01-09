@@ -7,47 +7,83 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 import { postData } from '../../utility/api-helper.js';
+
 // Function to schedule an appointment
-export function scheduleAppointment(doctorId, patientName, date, time) {
+export function scheduleAppointment(doctorId, patientId, date, time) {
     return __awaiter(this, void 0, void 0, function* () {
-        const scheduleDto = { doctorId, date, time };
-        const searchDto = { name: patientName };
+        const scheduleDto = {
+            doctorId: doctorId.toString(),
+            patientId: patientId.toString(),
+            date,
+            time
+        };
+
         try {
-            // Construct API endpoint with query parameter for patient name
-            const response = yield postData(`/doctor/schedule-appointment?name=${encodeURIComponent(searchDto.name)}`, scheduleDto);
-            // Log the response and notify the user
-            console.log('Appointment scheduled successfully:', response);
+            console.log('Sending appointment request with data:', scheduleDto);
+            
+            // Call postData, which already handles the response
+            const responseData = yield postData('/doctor/schedule-appointment', scheduleDto);
+            
+            // Assuming successful response, log it
+            console.log('Appointment response:', responseData);
             alert('Appointment scheduled successfully!');
-        }
-        catch (error) {
-            // Handle errors and notify the user
-            console.error('Error scheduling appointment:', error.message);
-            alert(`Failed to schedule appointment: ${error.message}`);
+        } catch (error) {
+            // Handle errors here
+            console.error('Error scheduling appointment:', error);
+            alert(`Failed to schedule appointment: ${error.message || error}`);
         }
     });
 }
 export function initializeScheduleForm() {
-    const form = document.getElementById('schedule-form');
-    if (!form)
-        return;
-    form.addEventListener('submit', (event) => __awaiter(this, void 0, void 0, function* () {
-        event.preventDefault();
-        const doctorIdInput = document.getElementById('doctor-id');
-        const patientNameInput = document.getElementById('patient-name');
-        const dateInput = document.getElementById('date');
-        const timeInput = document.getElementById('time');
-        // Read input values from the form
-        const doctorId = doctorIdInput === null || doctorIdInput === void 0 ? void 0 : doctorIdInput.value;
-        const patientName = patientNameInput === null || patientNameInput === void 0 ? void 0 : patientNameInput.value;
-        const date = dateInput === null || dateInput === void 0 ? void 0 : dateInput.value;
-        const time = timeInput === null || timeInput === void 0 ? void 0 : timeInput.value;
-        // Validate and submit the data
-        if (doctorId && patientName && date && time) {
-            yield scheduleAppointment(doctorId, patientName, date, time);
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM fully loaded and parsed.');
+
+        const form = document.getElementById('schedule-form');
+        if (!form) {
+            console.error('Schedule form not found');
+            return;
         }
-        else {
-            alert('Please fill in all fields.');
-        }
-    }));
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const doctorIdInput = document.getElementById('doctor-id');
+            const patientIdInput = document.getElementById('patient-id');
+            const dateInput = document.getElementById('schedule-date'); // Updated to match the new ID
+            const timeInput = document.getElementById('time');
+
+            if (!doctorIdInput || !patientIdInput || !dateInput || !timeInput) {
+                console.error('One or more form inputs are missing');
+                alert('Form is incomplete. Please check all fields.');
+                return;
+            }
+
+            const doctorId = doctorIdInput.value.trim();
+            const patientId = patientIdInput.value.trim();
+            const date = dateInput.value.trim(); // Ensure this is a string
+            const time = timeInput.value.trim();
+
+            console.log('Form Data:', { doctorId, patientId, date, time });
+
+            // Validate date before proceeding
+            if (!date || date === '') {
+                console.error('Date is required');
+                alert('Please select a date.');
+                return;
+            }
+
+            if (doctorId && patientId && date && time) {
+                scheduleAppointment(doctorId, patientId, date, time)
+                    .then(() => console.log('Appointment scheduled successfully'))
+                    .catch((err) => console.error('Error in scheduling appointment:', err));
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+    });
 }
+
+// Initialize the schedule form
+initializeScheduleForm();
