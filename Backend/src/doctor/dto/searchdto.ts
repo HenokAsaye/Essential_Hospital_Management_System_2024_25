@@ -1,6 +1,6 @@
-import {IsEmpty,IsString,IsOptional,IsEnum} from 'class-validator';
+import {IsEmpty,IsString,IsOptional,IsNumber,IsEnum} from 'class-validator';
 
 export class SearchDto {
-    @IsString()
-    name:string;
+    patientId?:string;
+    name?:string;
 }
