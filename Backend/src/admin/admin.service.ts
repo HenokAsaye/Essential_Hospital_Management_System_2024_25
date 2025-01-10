@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException,HttpException,HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { User, DoctorRequest, Role, requestStatus } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -47,6 +47,9 @@ export class AdminService {
     });
     await this.prisma.patient.deleteMany({
       where: { userId: data.userId },
+    });
+    await this.prisma.appointment.deleteMany({
+      where: { patientId: data.userId },  
     });
     return this.prisma.user.delete({
       where: { id: data.userId },
@@ -127,33 +130,64 @@ export class AdminService {
       throw new Error(`Unable to process the doctor request: ${error.message}`);
     }
   }
-  async inviteAdmin(data: SendAdminInviteDto): Promise<string> {
-    const user = await this.prisma.user.findUnique({
-      where: { email: data.email },
-    });
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-    const adminHomePageLink = `http://localhost:5000/admin.html`;  
-    const existingAdmin = await this.prisma.admin.findUnique({
-      where: { userId: user.id },
-    });
   
-    if (existingAdmin) {
-      throw new UnauthorizedException('user already An Admin')
+
+  async inviteAdmin(data: SendAdminInviteDto): Promise<{ message: string }> {
+    try {
+
+      const user = await this.prisma.user.findUnique({
+        where: { email: data.email },
+      });
+  
+      if (!user) {
+        throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+      }
+  
+      // Step 2: Check if the user is already an admin
+      const existingAdmin = await this.prisma.admin.findUnique({
+        where: { userId: user.id },
+      });
+  
+      if (existingAdmin) {
+        throw new HttpException('User is already an admin', HttpStatus.UNAUTHORIZED);
+      }
+  
+      // Step 3: Send the invitation email
+      const adminHomePageLink = `http://localhost:5000/admin.html`;
+      await sendInviteEmail(user.email, adminHomePageLink);
+  
+      // Step 4: Update the user's role to admin
+      const updatedUser = await this.prisma.user.update({
+        where: { id: user.id },
+        data: { role: Role.Admin },
+      });
+  
+      // Step 5: Create the admin record
+      await this.prisma.admin.create({
+        data: {
+          userId: updatedUser.id,
+        },
+      });
+  
+      return { message: `Admin invite sent! The user can access the admin page at ${adminHomePageLink}` };
+
+  
+    } catch (error) {
+      console.error('Error inviting admin:', error);
+  
+      // Ensure that the error message is user-friendly and consistent
+      if (error instanceof HttpException) {
+        throw error; // If it's already a known exception, just throw it
+      } else {
+        // For any unexpected errors, throw a generic message with a 500 Internal Server Error status
+        throw new HttpException(
+          'An unexpected error occurred while processing the admin invitation.',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
-    await sendInviteEmail(user.email, adminHomePageLink);
-    const updatedUser = await this.prisma.user.update({
-      where: { id: user.id },
-      data: { role: Role.Admin },
-    });
-    await this.prisma.admin.create({
-      data: {
-        userId: updatedUser.id,
-      },
-    });
-    return `Admin invite sent! The user can access the admin page at ${adminHomePageLink}`;
   }
+  
   async findUserByEmail(data: FindUserByEmailDto): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: { email: data.email },

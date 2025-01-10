@@ -1,29 +1,23 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
 import { postData } from '../../utility/api-helper.js';
-        const scheduleDto = {
-            doctorId: doctorId.toString(),
-            patientId: patientId.toString(),
-            date,
-            time
-        };
-        try {
-            console.log('Sending appointment request with data:', scheduleDto);
-            const responseData = yield postData('/doctor/schedule-appointment', scheduleDto);
-            console.log('Appointment response:', responseData);
-            alert('Appointment scheduled successfully!');
-        } catch (error) {
-            console.error('Error scheduling appointment:', error);
-            alert(`Failed to schedule appointment: ${error.message || error}`);
-        }
+
+async function scheduleAppointment(doctorId, patientId, date, time) {
+    const scheduleDto = {
+        doctorId: doctorId.toString(),
+        patientId: patientId.toString(),
+        date,
+        time
+    };
+    try {
+        console.log('Sending appointment request with data:', scheduleDto);
+        const responseData = await postData('/doctor/schedule-appointment', scheduleDto);
+        console.log('Appointment response:', responseData);
+        alert('Appointment scheduled successfully!');
+    } catch (error) {
+        console.error('Error scheduling appointment:', error);
+        alert(`Failed to schedule appointment: ${error.message || error}`);
+    }
+}
+
 export function initializeScheduleForm() {
     document.addEventListener('DOMContentLoaded', () => {
         console.log('DOM fully loaded and parsed.');
@@ -47,7 +41,7 @@ export function initializeScheduleForm() {
             }
             const doctorId = doctorIdInput.value.trim();
             const patientId = patientIdInput.value.trim();
-            const date = dateInput.value.trim(); 
+            const date = dateInput.value.trim();
             const time = timeInput.value.trim();
 
             console.log('Form Data:', { doctorId, patientId, date, time });
@@ -66,4 +60,5 @@ export function initializeScheduleForm() {
         });
     });
 }
+
 initializeScheduleForm();

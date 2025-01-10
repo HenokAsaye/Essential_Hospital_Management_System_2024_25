@@ -3,7 +3,7 @@ import { AdminService } from './admin.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
 import {requestDto} from './dto/requests.dto';
-import { HttpException,HttpStatus } from '@nestjs/common';
+import { HttpException,HttpStatus,UnauthorizedException } from '@nestjs/common';
 import { SendAdminInviteDto } from './dto/send-user-email.dto';
 import { FindUserByEmailDto } from './dto/find-user-email.dto';
 
@@ -36,8 +36,17 @@ export class AdminController {
   }
   @Post('invite-admin')
   async inviteadmin(@Body() data: SendAdminInviteDto) {
-    return this.adminService.inviteAdmin(data);
+    try {
+      return await this.adminService.inviteAdmin(data);
+    } catch (error) {
+      console.error('Error inviting admin:', error);
+      if (error instanceof UnauthorizedException) {
+        throw new UnauthorizedException(error.message); 
+      }
+      throw new Error('Unexpected error occurred while inviting admin.');
+    }
   }
+  
   @Post('find-user')
   async findUserByEmail(@Body() data: FindUserByEmailDto) {
     return this.adminService.findUserByEmail(data);

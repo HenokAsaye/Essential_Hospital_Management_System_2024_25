@@ -45,25 +45,18 @@ export function initDoctorRequest() {
         });
 
         console.log('Doctor Registration Response:', response);
-        if (response && response.success) {
-          showNotification('Your registration request was submitted successfully.', 'success');
-
-          // Clear the form fields
-          doctorRegistrationForm.querySelector('#name').value = '';
-          doctorRegistrationForm.querySelector('#email').value = '';
-          doctorRegistrationForm.querySelector('#contact').value = '';
-          doctorRegistrationForm.querySelector('#password').value = '';
-          doctorRegistrationForm.querySelector('#age').value = '';
-          doctorRegistrationForm.querySelector('#gender').selectedIndex = 0; // Reset dropdown
-
-          // Alert message after form submission
-          alert('Your registration request has been successfully submitted.');
-
-          console.log('Form fields have been manually reset.');
-
+        if (response && response.message) {
+          showNotification(response.message, 'success');
+        
+    
+          doctorRegistrationForm.reset();
+        
+          // Reset dropdown selection
+          doctorRegistrationForm.querySelector('#gender').selectedIndex = 0;
         } else {
           showNotification(response.message || 'Failed to submit the registration request.', 'error');
         }
+        
       } catch (error) {
         console.error('Error submitting doctor registration request:', error);
 
