@@ -58,7 +58,9 @@ export class AppModule {
         { path: '/auth/firstadmin', method: RequestMethod.POST },
         { path: '/auth/loginadmin', method: RequestMethod.POST },
         { path: '/index.html', method: RequestMethod.GET },
+        { path: '/favicon.ico', method: RequestMethod.GET } // Exclude favicon route
       )
       .forRoutes('*');
   }
 }
+
