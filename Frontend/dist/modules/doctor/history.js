@@ -36,7 +36,6 @@ export function updatePatientHistory(name, diagnosis, note, date) {
         }
     });
 }
-
 export function initializeHistory(patientId) {
     const historyContainer = document.getElementById('history-container');
     const historyForm = document.getElementById('history-form');

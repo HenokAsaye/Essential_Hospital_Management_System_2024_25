@@ -1,4 +1,5 @@
-import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, InternalServerErrorException,BadRequestException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
@@ -6,7 +7,7 @@ import { AdminDto } from './dto/admin.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
-import passport from 'passport';
+
 
 @Injectable()
 export class AuthService {
@@ -21,7 +22,6 @@ export class AuthService {
       if (userExists) {
         throw new UnauthorizedException('User already exists');
       }
-
       const hashedPassword = await bcrypt.hash(signupDto.password, 10);
       const user = await this.prisma.user.create({
         data: {
@@ -40,7 +40,7 @@ export class AuthService {
         },
       });
       const token = await this.jwtService.signAsync({ userId: user.id, email: user.email });
-      res.cookie('access_token', token, {
+      res.cookie('accessToken', token, {
         httpOnly: false,
         maxAge: 3600000, 
         secure: false, 
@@ -69,33 +69,40 @@ export class AuthService {
       throw new InternalServerErrorException('An error occurred while registering the patient.');
     }
   }
-
   async registerDoctor(signupDto: SignupDto) {
+    const prisma = this.prisma;
+  
+    // Check if the email already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email: signupDto.email },
+    });
+  
+    if (existingUser) {
+      throw new UnauthorizedException(`A user with the email ${signupDto.email} already exists.`);
+    }
+  
     try {
-      const userExists = await this.prisma.user.findUnique({ where: { email: signupDto.email } });
-      if (userExists) {
-        throw new UnauthorizedException('User already exists');
-      }
-
+      // Hash the password
       const hashedPassword = await bcrypt.hash(signupDto.password, 10);
-      const user = await this.prisma.user.create({
+  
+      // Create the user
+      const user = await prisma.user.create({
         data: {
           name: signupDto.name,
           email: signupDto.email,
           password: hashedPassword,
-          role: 'Doctor',
+          role: signupDto.role,
         },
       });
-
-      // Creating doctor request entry
-      await this.prisma.doctorRequest.create({
+  
+      // Create the doctor request
+      await prisma.doctorRequest.create({
         data: {
           userId: user.id,
           status: 'PENDING',
         },
       });
-
-      // Return simplified response
+  
       return {
         message: 'Doctor signup request submitted. Awaiting admin approval.',
         data: {
@@ -109,13 +116,15 @@ export class AuthService {
       };
     } catch (error) {
       console.error('Error in registerDoctor:', error);
-      if (error instanceof UnauthorizedException) {
-        throw error;
+  
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        throw new UnauthorizedException(`A user with the email ${signupDto.email} already exists.`);
       }
+  
       throw new InternalServerErrorException('An error occurred while registering the doctor.');
     }
   }
-
+  
   async login(loginDto: LoginDto, res: Response) {
     try {
       const { email, password } = loginDto;
@@ -139,8 +148,6 @@ export class AuthService {
         sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
       });
-
-      // Return simplified response
       return {
           id: user.id,
           name: user.name,
@@ -157,7 +164,6 @@ export class AuthService {
       throw new InternalServerErrorException('An error occurred while logging in.');
     }
   }
-
   async firstAdmin(adminDto: AdminDto) {
     try {
       const { email, name } = adminDto;

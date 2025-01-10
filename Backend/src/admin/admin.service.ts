@@ -39,20 +39,15 @@ export class AdminService {
     });
   }
   async deleteUser(data: DeleteUserDto): Promise<User> {
-    // First, delete any related doctor requests that reference this user
     await this.prisma.doctorRequest.deleteMany({
       where: { userId: data.userId },
     });
-  
-    // Then, delete any related doctor and patient records
     await this.prisma.doctor.deleteMany({
       where: { userId: data.userId },
     });
     await this.prisma.patient.deleteMany({
       where: { userId: data.userId },
     });
-  
-    // Finally, delete the user itself
     return this.prisma.user.delete({
       where: { id: data.userId },
     });
@@ -65,7 +60,7 @@ export class AdminService {
         User: {
           select: {
             name: true,  
-            email: true, //
+            email: true, 
           }
         }
       }

@@ -7,59 +7,57 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 import { getData } from '../../utility/api-helper.js';
+
 export function fetchMedicalHistory(patientId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const response = yield getData(`/patient/medical-history`);
-            const medicalHistory = response.medicalHistory || []; 
-            // Ensure the response is an array before calling map
-            if (Array.isArray(medicalHistory)) {
-                return medicalHistory.map((entry) => ({
-                    diagnosis: entry.diagnosis,
-                    treatment: entry.note, // Assuming 'note' corresponds to treatment
-                    date: entry.date,
-                }));
+            console.log('Medical History Response:', response);  // Log the response
+
+            // Check if response is an array directly
+            if (Array.isArray(response)) {
+                return response;
             } else {
-                console.error('Expected an array but got:', medicalHistory);
-                throw new Error('Invalid response format');
+                throw new Error('Invalid data format');
             }
         } catch (error) {
-            if (error instanceof Error) {
-                console.error('Failed to fetch medical history:', error.message);
-            } else {
-                console.error('Failed to fetch medical history:', error);
-            }
+            console.error('Failed to fetch medical history:', error);
             throw error;
         }
     });
 }
-// Function to populate the medical history section
-export function populateMedicalHistory(patientId) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const medicalHistoryContainer = document.getElementById('medical-history');
-        try {
-            const medicalHistory = yield fetchMedicalHistory(patientId);
-            if (medicalHistoryContainer) {
-                if (medicalHistory.length > 0) {
-                    medicalHistoryContainer.innerHTML = medicalHistory
-                        .map((entry) => `<div class="medical-history-card">
-                            <p><strong>Condition:</strong> ${entry.diagnosis}</p>
-                            <p><strong>Treatment:</strong> ${entry.treatment}</p>
-                            <p><strong>Date:</strong> ${entry.date}</p>
-                        </div>`)
-                        .join('');
-                } else {
-                    medicalHistoryContainer.innerHTML = '<p>No medical history available.</p>';
-                }
-            } else {
-                console.error('Medical history container not found.');
-            }
-        } catch (error) {
-            if (medicalHistoryContainer) {
-                medicalHistoryContainer.innerHTML = '<p>Error loading medical history.</p>';
-            }
-            console.error(error);
-        }
+
+export function populateMedicalHistory(medicalHistory) {
+    console.log('Populate Medical History with:', medicalHistory);  // Log the data
+
+    if (!Array.isArray(medicalHistory) || medicalHistory.length === 0) {
+        console.error('Invalid data format for medicalHistory or empty data');
+        return;
+    }
+
+    // Get the container element where you want to display the medical history
+    const container = document.getElementById('medical-history');
+    
+    // If the container doesn't exist, log an error and return
+    if (!container) {
+        console.error('Medical history container not found');
+        return;
+    }
+
+    // Clear the container before adding new content
+    container.innerHTML = '';
+
+    // Iterate over each entry in medical history and append to the container
+    medicalHistory.forEach(entry => {
+        const entryElement = document.createElement('div');
+        entryElement.classList.add('medical-history-entry');
+        entryElement.innerHTML = `
+            <div><strong>Diagnosis:</strong> ${entry.diagnosis}</div>
+            <div><strong>Treatment:</strong> ${entry.note}</div>  <!-- Assuming 'note' corresponds to the treatment -->
+            <div><strong>Date:</strong> ${new Date(entry.date).toLocaleDateString()}</div>
+        `;
+        container.appendChild(entryElement);
     });
 }

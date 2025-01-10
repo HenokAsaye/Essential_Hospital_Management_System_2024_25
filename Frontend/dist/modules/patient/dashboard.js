@@ -11,49 +11,48 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { fetchAppointments, populateAppointments } from './appointment.js';
 import { fetchMedicalHistory, populateMedicalHistory } from './medicalHistory.js';
 
-// Function to get a specific cookie by its name
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) {
-        return parts.pop().split(';').shift(); // Return cookie value
+        return parts.pop().split(';').shift(); 
     }
-    return null; // Cookie not found
+    return null; 
 }
 
-// Function to decode the JWT token and extract the userId
 function getUserIdFromToken(token) {
     try {
-        // Split the JWT token to get the payload
+        console.log("Token:", token); 
         const payload = token.split('.')[1];
-        const decodedPayload = atob(payload); // Decode the base64-encoded payload
-        const parsedPayload = JSON.parse(decodedPayload); // Parse the decoded string into an object
-
-        return parsedPayload.userId; // Return the userId (patientId) from the payload
+        const decodedPayload = atob(payload); 
+        const parsedPayload = JSON.parse(decodedPayload); 
+        console.log("Decoded Payload:", parsedPayload); 
+        return parsedPayload.userId; 
     } catch (error) {
         console.error('Error decoding the token:', error);
         return null;
     }
 }
 
-// Function to get patientId from the JWT token in cookies
 function getPatientIdFromCookie() {
-    const token = getCookie('access_token'); // Ensure the correct cookie name 'access_token'
+    const token = getCookie('accessToken'); 
     if (token) {
-        console.log("Retrieved token from cookie:", token); // Log the token for debugging
-        return getUserIdFromToken(token); // Extract and return the userId from the token
+        console.log("Retrieved token from cookie:", token); 
+        return getUserIdFromToken(token); 
     }
     console.error("Token not found or invalid");
-    return null; // Return null if token is not found
+    return null; 
 }
 
-// Fetch and combine all the data needed for the patient dashboard
 export function fetchDashboardData(patientId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const appointments = yield fetchAppointments(patientId);
             const medicalHistory = yield fetchMedicalHistory(patientId);
-            // Return combined data for the dashboard
+            
+            console.log('Appointments:', appointments);  // Add log to check data
+            console.log('Medical History:', medicalHistory);  // Add log to check data
+            
             return {
                 appointments,
                 medicalHistory,
@@ -65,14 +64,16 @@ export function fetchDashboardData(patientId) {
     });
 }
 
-// Initialize the page
 document.addEventListener('DOMContentLoaded', () => __awaiter(void 0, void 0, void 0, function* () {
-    const patientId = getPatientIdFromCookie(); // Get the patientId from the token
+    const patientId = getPatientIdFromCookie();
     if (patientId) {
-        // Fetch the patient's dashboard data once the ID is retrieved
-        yield fetchDashboardData(patientId);
-        populateAppointments(patientId);
-        populateMedicalHistory(patientId);
+        try {
+            const { appointments, medicalHistory } = yield fetchDashboardData(patientId);
+            populateAppointments(appointments);  
+            populateMedicalHistory(medicalHistory);  
+        } catch (error) {
+            console.error('Error loading dashboard:', error);
+        }
     } else {
         console.error('Patient ID could not be retrieved');
     }

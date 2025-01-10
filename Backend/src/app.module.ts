@@ -39,8 +39,6 @@ import { join } from 'path';
       rootPath: join(__dirname, '..', '..', '..', 'Frontend', 'dist', 'public'),
       serveRoot: '/public',
     }),
-
-    // Serve 'utility' folder under the /utility route
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', '..', 'Frontend', 'dist', 'utility'),
       serveRoot: '/utility',

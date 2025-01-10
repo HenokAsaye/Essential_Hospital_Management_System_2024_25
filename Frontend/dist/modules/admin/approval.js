@@ -1,6 +1,4 @@
 import { getData, patchData, deleteData } from '../../utility/api-helper.js';
-
-// Function to fetch and display doctor requests
 export async function displayDoctorRequests() {
     console.log('Fetching doctor requests from /admin/doctorRequests');
     try {
@@ -22,8 +20,6 @@ export async function displayDoctorRequests() {
                 </td>
             `;
             requestsTable.appendChild(row);
-
-            // Attach event listeners to buttons
             document.getElementById(`approve-${request.id}`).addEventListener('click', async () => {
                 await approveDoctorRequest(request.id);
             });
@@ -36,8 +32,6 @@ export async function displayDoctorRequests() {
         console.error('Error fetching doctor requests:', error);
     }
 }
-
-// Function to handle button clicks
 async function handleButtonClick(event) {
     const button = event.target;
     const action = button.getAttribute('data-action');
@@ -51,8 +45,6 @@ async function handleButtonClick(event) {
         await declineDoctorRequest(requestId);
     }
 }
-
-// Function to approve a doctor request
 export async function approveDoctorRequest(requestId) {
     const data = { id: requestId, status: 'APPROVED' };
     console.log('Approving request with id:', requestId);
@@ -63,22 +55,17 @@ export async function approveDoctorRequest(requestId) {
         console.error('Error approving doctor request:', error);
     }
 }
-
-// Function to decline a doctor request
 export async function declineDoctorRequest(requestId) {
     console.log('Declining request with id:', requestId);
 
     try {
         const data = { id: requestId };
         await deleteData('/admin/declineRequest', data);
-        displayDoctorRequests();  // Refresh the list after decline
+        displayDoctorRequests();  
     } catch (error) {
         console.error('Error declining doctor request:', error);
     }
 }
-
-
-// Initialize the doctor approval process
 export function initDoctorApproval() {
     console.log('Initializing doctor approval');
     displayDoctorRequests();

@@ -39,7 +39,6 @@ import {
     @Post('schedule-appointment')
 async scheduleAppointment(@Body() scheduleDto: ScheduleDto) {
     try {
-        // 
         const parsedDoctorId = parseInt(scheduleDto.doctorId);
         const parsedPatientId = parseInt(scheduleDto.patientId);
 

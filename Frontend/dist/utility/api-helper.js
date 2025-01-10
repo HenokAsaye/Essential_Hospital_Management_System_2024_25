@@ -47,7 +47,6 @@ export function postData(url = '', data = {}) {
         }
     });
 }
-
 export function getData(url) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch(`${BASE_URL}${url}`, {
@@ -60,7 +59,6 @@ export function getData(url) {
         return handleResponse(response);
     });
 }
-
 export function putData(url, data) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch(`${BASE_URL}${url}`, {

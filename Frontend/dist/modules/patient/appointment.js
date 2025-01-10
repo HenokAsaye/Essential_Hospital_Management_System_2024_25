@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { getData } from '../../utility/api-helper.js';
-// Fetch appointments for a specific patient
 export function fetchAppointments() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -27,7 +26,7 @@ export function fetchAppointments() {
         }
     });
 }
-// Function to populate the appointments section
+
 export function populateAppointments(patientId) {
     return __awaiter(this, void 0, void 0, function* () {
         const appointmentsContainer = document.getElementById('appointments');

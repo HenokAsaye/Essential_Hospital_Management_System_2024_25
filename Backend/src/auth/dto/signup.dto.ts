@@ -1,36 +1,31 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength,IsOptional,IsEnum } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MinLength, IsOptional, IsEnum, IsNumber } from 'class-validator';
+import { Role } from '@prisma/client';  // Import Prisma enum
 
 export class SignupDto {
-@IsString()
-@IsNotEmpty()
-name:string;
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 
-@IsEmail()
-@IsNotEmpty()
-email:string;
+  @MinLength(6)
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 
+  @IsEnum(Role, { message: 'Role must be one of: Patient, Admin, Doctor' })  // Enum validation
+  role: Role;
 
-@MinLength(6)
-@IsString()
-@IsNotEmpty()
-password:string;
+  @IsOptional()
+  gender?: string;
 
+  @IsString()
+  @IsNotEmpty()
+  contact: string;
 
-@IsNotEmpty()
-role:string;
-
-
-@IsOptional()
-@IsString()
-gender?:string;
-
-
-@IsString()
-contact:string;
-
-
-
-@IsOptional()
-age?:number;
+  @IsOptional()
+  @IsNumber({}, { message: 'Age must be a number' })
+  age?: number;
 }

@@ -2,18 +2,18 @@ import { showNotification } from "../../main.js";
 import { navigateToPage } from '../../router.js';
 
 export function initRegister() {
-    console.log('Register function triggered');  // Make sure this log appears
+    console.log('Register function triggered');  
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
-        console.log('Register form found');  // Check if the form is found
+        console.log('Register form found');  
         registerForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-            console.log('Form submission triggered');  // Log here to confirm submission
+            console.log('Form submission triggered');  
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const role = document.getElementById('role').value;
-            const age = parseInt(document.getElementById('age').value);  // Convert to integer
+            const age = parseInt(document.getElementById('age').value);  
             const contact = document.getElementById('contact').value;
             const gender = document.getElementById('gender').value;
 
@@ -21,7 +21,6 @@ export function initRegister() {
                 showNotification('Please fill in all fields.', 'error');
                 return;
             }
-
             try {
                 const response = await fetch('/auth/signup', {
                     method: 'POST',
@@ -39,14 +38,13 @@ export function initRegister() {
                         gender,
                     }),
                 });
-
-                console.log('Response Status:', response.status);  // Log response status
+                console.log('Response Status:', response.status);  
                 const result = await response.json();
-                console.log('Response Body:', result);  // Log response body
+                console.log('Response Body:', result);  
 
                 if (response.ok) {
-                    const role = result.data.role.toLowerCase();  // Convert role to lowercase
-                    console.log('Navigating to role:', role);  // Log the role for navigation
+                    const role = result.data.role.toLowerCase();  
+                    console.log('Navigating to role:', role);  
                     showNotification(result.message || 'Registration successful', 'success');
                     navigateToPage(role);
                 } else {
@@ -54,10 +52,10 @@ export function initRegister() {
                 }
             } catch (error) {
                 showNotification('An error occurred. Please try again.', 'error');
-                console.error(error);  // Log the error to check what went wrong
+                console.error(error);  
             }
         });
     } else {
-        console.log('Register form not found');  // This will log if the form element isn't found
+        console.log('Register form not found'); 
     }
 }

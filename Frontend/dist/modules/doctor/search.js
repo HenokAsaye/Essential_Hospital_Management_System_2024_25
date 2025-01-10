@@ -44,8 +44,7 @@ searchForm.addEventListener('submit', (e) => __awaiter(void 0, void 0, void 0, f
             newTbody.appendChild(row);
         });
         resultsTable.appendChild(newTbody);
-        resultsTable.style.display = 'table'; // Show the table
-        // Add event listeners for "Manage Medical History" buttons
+        resultsTable.style.display = 'table'; 
         const manageButtons = document.querySelectorAll('.manage-history-btn');
         manageButtons.forEach((button) => {
             button.addEventListener('click', (event) => {
@@ -59,75 +58,46 @@ searchForm.addEventListener('submit', (e) => __awaiter(void 0, void 0, void 0, f
         alert('Failed to fetch patient data. Please try again.');
     }
 }));
-// Handle the "Manage Medical History" button click
-// Handle the "Manage Medical History" button click
-// Handle the "Manage Medical History" button click
-// Handle the "Manage Medical History" button click
-// Handle the "Manage Medical History" button click
-// Handle the "Manage Medical History" button click
 function handleManageHistory(patientId) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Manage History clicked for patient:", patientId);
-
-        // Show the patient history form
         if (patientHistorySection) {
             patientHistorySection.style.display = 'block';
         }
-
-        // Show the form for entering new medical history
         const historyForm = document.getElementById('history-form');
         if (historyForm) {
-            historyForm.style.display = 'block'; // Ensure the form is visible
+            historyForm.style.display = 'block'; 
         }
-
-        // Handle form submission for updating medical history
         const updateButton = document.getElementById('update-button');
         if (updateButton) {
             console.log("Update button found. Attaching event listener...");
             updateButton.addEventListener('click', (event) => __awaiter(this, void 0, void 0, function* () {
                 console.log("Update button clicked");
                 event.preventDefault();
-
-                // Retrieve values from the form
                 const diagnosis = document.getElementById('diagnosis').value.trim();
                 const note = document.getElementById('note').value.trim();
                 const date = document.getElementById('date').value.trim();
 
                 console.log("Diagnosis:", diagnosis, "Note:", note, "Date:", date);
-
-                // Check if any of the required fields are missing
                 if (!diagnosis || !note || !date) {
                     alert('Please fill in all fields.');
                     return;
                 }
-
-                // Format the date to ISO string
                 const formattedDate = new Date(date).toISOString();
                 console.log("Formatted Date:", formattedDate);
-
-                // Create the medical DTO to send to the backend
                 const medicalDto = {
                     diagnosis,
                     note,
                     date: formattedDate,
                 };
-
                 try {
                     console.log("Sending data to backend:", medicalDto);
-                    // Send update request to the backend
                     const updateResponse = yield postData(`/doctor/edit-medical-record?patientId=${encodeURIComponent(patientId)}`, medicalDto);
-
-                    // Log the response to debug
                     console.log('Update response:', updateResponse);
 
                     alert('Medical history updated successfully!');
-
-                    // Optionally, hide the form after successful update
                     historyForm.reset();
                     historyForm.style.display = 'none';
-
-                    // Reload the patient's history (if needed)
-                    // handleManageHistory(patientId); // Uncomment if you want to reload the history here
                 } catch (error) {
                     console.error('Error updating patient history:', error);
                     alert(`Failed to update medical history: ${error.message}`);
