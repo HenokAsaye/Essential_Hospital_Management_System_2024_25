@@ -10,7 +10,8 @@
 <body>
   <!-- Header -->
   <header class="header bg-primary text-white p-3 d-flex justify-content-between align-items-center">
-    <h1 class="doctor-title">Doctor Dashboard</h1>
+    <h1 class="doctor-title m-0">Doctor Dashboard</h1>
+    <a href="#" id="logout-btn" class="btn btn-outline-light">Logout</a>
   </header>
 
   <!-- Main Content -->
@@ -97,5 +98,13 @@
   <script src="../src/modules/doctor/search.js"></script>
   <script src="../src/modules/doctor/schedule.js"></script>
   <script src="../src/modules/doctor/history.js"></script>
+
+  <script>
+    // Add logout functionality
+    document.getElementById('logout-btn').addEventListener('click', function() {
+      // Redirect to registration page on logout
+      window.location.href = '/doctorRequest.html'; 
+    });
+  </script>
 </body>
 </html>

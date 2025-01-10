@@ -1,7 +1,11 @@
 /* General Reset */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #f9f9f9;
+  background-image: url('../assets/images/doctor.bg.jpg'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #333;
 }
 .container {
   margin-top: 20px;

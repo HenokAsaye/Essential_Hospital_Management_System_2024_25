@@ -75,10 +75,26 @@
       </div>
 
       <!-- Submit Button -->
-      <button type="submit" class="btn btn-primary btn-block mt-3">Submit Request</button>
+      <button type="submit" class="btn btn-primary btn-block mt-3" id="submit-request-btn">Submit Request</button>
     </form>
   </div>
 
   <script type="module" src="../modules/auth/doctorRequest.js"></script>
+  <script>
+    document.getElementById('submit-request-btn').addEventListener('click', function() {
+      const formElements = document.querySelectorAll('#doctorRegistrationForm input, #doctorRegistrationForm select');
+    formElements.forEach(function(element) {
+      element.value = '';  // Clear the value of each element
+    });
+
+    
+    const submitButton = document.getElementById('submit-request-btn');
+    submitButton.disabled = false;
+    submitButton.textContent = 'Submit Request'; 
+  
+      alert('Your registration request was submitted successfully. Awaiting admin approval.');
+          
+    });
+  </script>
 </body>
 </html>

@@ -10,7 +10,8 @@
 <body>
   <!-- Header -->
   <header class="header bg-primary text-white p-3 d-flex justify-content-between align-items-center">
-    <h1 class="doctor-title">Doctor Dashboard</h1>
+    <h1 class="doctor-title m-0">Doctor Dashboard</h1>
+    <a href="#" id="logout-btn" class="btn btn-outline-light">Logout</a>
   </header>
 
   <!-- Main Content -->
@@ -57,7 +58,7 @@
           <input type="date" id="date" class="form-control">
         </div>
         <div class="col-md-12">
-          <button type="submit" id="update-button" class="btn btn-primary">Update History</button>
+          <button type="submit" class="btn btn-primary">Update History</button>
         </div>
       </form>
     </section>
@@ -71,12 +72,12 @@
           <input type="text" id="doctor-id" class="form-control" placeholder="Enter Doctor ID">
         </div>
         <div class="col-md-3">
-          <label for="patient-id" class="form-label">Patient ID</label>
-          <input type="text" id="patient-id" class="form-control" placeholder="Enter Patient ID">
+          <label for="patient-name" class="form-label">Patient Name</label>
+          <input type="text" id="patient-name" class="form-control" placeholder="Enter Patient Name">
         </div>
         <div class="col-md-3">
-          <label for="schedule-date" class="form-label">Date</label>
-          <input type="date" id="schedule-date" class="form-control">
+          <label for="date" class="form-label">Date</label>
+          <input type="date" id="date" class="form-control">
         </div>
         <div class="col-md-3">
           <label for="time" class="form-label">Time</label>
@@ -93,9 +94,17 @@
   <footer class="footer bg-primary text-white text-center py-3">
     &copy; 2025 Patient Management System. All Rights Reserved.
   </footer>
-  <script type="module" src="../modules/doctor/schedule.js"></script>
-  <script  type="module"  src="../modules/doctor/history.js"></script>
-  <script type="module" src="../modules/doctor/search.js"></script>
 
+  <script src="../src/modules/doctor/search.js"></script>
+  <script src="../src/modules/doctor/schedule.js"></script>
+  <script src="../src/modules/doctor/history.js"></script>
+
+  <script>
+    // Add logout functionality
+    document.getElementById('logout-btn').addEventListener('click', function() {
+      // Redirect to registration page on logout
+      window.location.href = '/doctorRequest.html'; 
+    });
+  </script>
 </body>
 </html>

@@ -3,11 +3,15 @@ import { postData } from '../../utility/api-helper.js';
 
 export function initDoctorRequest() {
   console.log('Doctor Registration Request Initialized');
+  
   const doctorRegistrationForm = document.getElementById('doctorRegistrationForm');
+  const submitRequestButton = document.getElementById('submit-request-btn');  // Target the Submit button by ID
 
   if (doctorRegistrationForm) {
-    doctorRegistrationForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
+    // Add onclick event to the Submit button
+    submitRequestButton.onclick = async function(event) {
+      event.preventDefault();  // Prevent default form submission
+
       console.log('Doctor registration form submitted');
 
       try {
@@ -44,16 +48,16 @@ export function initDoctorRequest() {
         if (response && response.success) {
           showNotification('Your registration request was submitted successfully.', 'success');
 
-          // Log before resetting the form
-          console.log('Resetting form...');
-
-          // Manually reset the form fields
+          // Clear the form fields
           doctorRegistrationForm.querySelector('#name').value = '';
           doctorRegistrationForm.querySelector('#email').value = '';
           doctorRegistrationForm.querySelector('#contact').value = '';
           doctorRegistrationForm.querySelector('#password').value = '';
           doctorRegistrationForm.querySelector('#age').value = '';
           doctorRegistrationForm.querySelector('#gender').selectedIndex = 0; // Reset dropdown
+
+          // Alert message after form submission
+          alert('Your registration request has been successfully submitted.');
 
           console.log('Form fields have been manually reset.');
 
@@ -69,6 +73,6 @@ export function initDoctorRequest() {
           showNotification('An error occurred. Please try again later.', 'error');
         }
       }
-    });
+    };
   }
 }

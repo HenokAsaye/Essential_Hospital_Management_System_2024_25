@@ -1,4 +1,11 @@
 /* General Page Styling */
+html, body {
+  height: 100%; /* Full height */
+  margin: 0; /* Remove default margin */
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+}
+
 body {
   font-family: "Roboto Slab", serif;
   background-image: url('../assets/images/patient_bg.jpg'); 
@@ -6,6 +13,33 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   color: #333;
+}
+
+/* Main content */
+main {
+  flex: 1; /* Allow the main content to take up available space */
+}
+
+/* Header */
+.header-section {
+  background-color: #007bff; /* Primary Color */
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-section h1 {
+  font-size: 2rem;
+}
+
+.header-section nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.header-section nav ul li a:hover {
+  text-decoration: underline;
 }
 
 /* Cards */
@@ -39,29 +73,7 @@ body {
   display: block;
 }
 
-
-.header-section {
-  background-color: #007bff; /* Primary Color */
-  color: white;
-  padding: 1rem 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.header-section h1 {
-  font-size: 2rem;
-}
-
-.header-section nav ul li a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.header-section nav ul li a:hover {
-  text-decoration: underline;
-}
-
-
+/* Section Box */
 .section-box {
   background: white;
   border-radius: 8px;
@@ -85,12 +97,20 @@ body {
   color: #555;
 }
 
+/* Footer */
 .footer-section {
-  background: #f1f1f1;
-  font-size: 0.9rem;
+  background: #007bff;
+  font-size: 1rem;
   color: #666;
+  text-align: center;
+  padding: 10px 0;
+}
+.footer-section p{
+  color: #fff;
+  font-size: 1rem;
 }
 
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .header-section h1 {
     font-size: 1.5rem;

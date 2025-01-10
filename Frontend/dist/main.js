@@ -8,14 +8,19 @@ export function showNotification(message, type) {
     const notificationContainer = document.createElement('div');
     notificationContainer.classList.add('notification', type);
     notificationContainer.innerText = message;
-    document.body.appendChild(notificationContainer);
+
+    const alertContainer = document.getElementById('alert-container');
+    if (alertContainer) {
+        alertContainer.innerHTML = '';  // Clear previous messages
+        alertContainer.appendChild(notificationContainer);
+    }
     setTimeout(() => notificationContainer.remove(), 3000);
 }
 document.addEventListener('DOMContentLoaded', function () {
     initFormToggling();
     initRegister();
     initAuth();
-    initDoctorRequest(); // Initialize doctor request functionality
+    initDoctorRequest(); 
 });
 function initFormToggling() {
     const showLoginLink = document.getElementById('showLogin');
@@ -45,9 +50,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (doctorApprovalLink && doctorApprovalSection) {
         doctorApprovalLink.addEventListener('click', function (event) {
             event.preventDefault(); // Prevent the default action (link navigation)
-            doctorApprovalSection.classList.remove('d-none'); // Show the doctor approval section
-            document.getElementById('user-management-section').classList.add('d-none'); // Hide other sections
-            document.getElementById('invite-admin-section').classList.add('d-none'); // Hide invite section
+            doctorApprovalSection.classList.remove('d-none'); 
+            document.getElementById('user-management-section').classList.add('d-none'); 
+            document.getElementById('invite-admin-section').classList.add('d-none'); 
 
             // Initialize doctor approval
             initDoctorApproval(); 
@@ -69,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
             userManagementSection.classList.remove('d-none');
             (_a = document.getElementById('doctor-approval-section')) === null || _a === void 0 ? void 0 : _a.classList.add('d-none');
             (_b = document.getElementById('invite-admin-section')) === null || _b === void 0 ? void 0 : _b.classList.add('d-none');
-            initUserManagement(); // Ensure this function exists in users.ts
+            initUserManagement(); 
         });
     }
     const inviteAdminLink = document.getElementById('invite-admin-link');
