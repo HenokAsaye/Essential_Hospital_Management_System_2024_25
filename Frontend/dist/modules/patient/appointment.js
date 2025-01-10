@@ -10,22 +10,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { getData } from '../../utility/api-helper.js';
 export function fetchAppointments() {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const response = yield getData(`/patient/appointments`);
-            console.log(response)
-            return response.map((appointment) => ({
-                id: appointment.id,
-                date: appointment.date,
-                time: appointment.time,
-                doctorName: appointment.Doctor.name,
-            }));
-        }
-        catch (error) {
-            console.error('Failed to fetch appointments:');
-            throw error;
-        }
+      try {
+        const response = yield getData(`/patient/appointments`);
+        console.log(response);
+  
+        // The data is already in the expected format, so no need for extra mapping
+        return response.map((appointment) => ({
+          id: appointment.id,
+          date: appointment.date,
+          time: appointment.time,
+          doctorName: appointment.doctorName, // Directly use the doctorName field
+        }));
+      } catch (error) {
+        console.error('Failed to fetch appointments:');
+        throw error;
+      }
     });
-}
+  }
+  
 
 export function populateAppointments(patientId) {
     return __awaiter(this, void 0, void 0, function* () {
