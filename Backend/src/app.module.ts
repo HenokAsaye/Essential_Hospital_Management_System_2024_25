@@ -23,14 +23,11 @@ import { join } from 'path';
     DoctorModule,
     PrismaModule,
     ConfigModule,
-    
-    // Serve the 'dist' folder where all frontend assets are located
+
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', '..', 'Frontend', 'dist'),
-      serveRoot: '/', // Serve the root of dist as '/'
+      serveRoot: '/', 
     }),
-
-    // Serve 'modules' folder under the /modules route
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', '..', 'Frontend', 'dist', 'modules'),
       serveRoot: '/modules',
@@ -58,7 +55,7 @@ export class AppModule {
         { path: '/auth/firstadmin', method: RequestMethod.POST },
         { path: '/auth/loginadmin', method: RequestMethod.POST },
         { path: '/index.html', method: RequestMethod.GET },
-        { path: '/favicon.ico', method: RequestMethod.GET } // Exclude favicon route
+        { path: '/favicon.ico', method: RequestMethod.GET } 
       )
       .forRoutes('*');
   }
