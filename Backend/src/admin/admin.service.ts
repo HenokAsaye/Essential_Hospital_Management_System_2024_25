@@ -51,6 +51,9 @@ export class AdminService {
     await this.prisma.appointment.deleteMany({
       where: { patientId: data.userId },  
     });
+    await this.prisma.admin.deleteMany({
+      where: { userId: data.userId },  
+    });
     return this.prisma.user.delete({
       where: { id: data.userId },
     });
