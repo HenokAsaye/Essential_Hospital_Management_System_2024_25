@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { PatientService } from './patient.service';
 import { PatientController } from './patient.controller';
-import { PrismaService } from 'prisma/prisma.service';  
-import { PrismaModule } from 'prisma/prisma.module';
+import { PrismaService } from 'Backend/prisma/prisma.service';  
+import { PrismaModule } from 'Backend/prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({

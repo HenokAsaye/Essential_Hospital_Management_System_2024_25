@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from 'prisma/prisma.service';
+import { PrismaService } from 'Backend/prisma/prisma.service';
 import { User, DoctorRequest, Role, requestStatus } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
@@ -7,7 +7,7 @@ import {requestDto} from "./dto/requests.dto"
 import { HandleDoctorRequestDto } from './dto/handle-doctor-request.dto';
 import { SendAdminInviteDto } from './dto/send-user-email.dto';
 import { FindUserByEmailDto } from './dto/find-user-email.dto';
-import { sendInviteEmail } from 'src/Email/Email';
+import { sendInviteEmail } from 'Backend/src/Email/Email';
 
 
 @Injectable()
