@@ -72,7 +72,7 @@
     </form>
   </div>
 
-  <script>
+  <!-- <script>
     // Handle form submission
     document.getElementById('doctorRegistrationForm').addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -107,7 +107,28 @@
         console.error('Error submitting request:', error);
         alert('An unexpected error occurred. Please try again later.');
       }
+      alert('Your request has been submitted successfully. Await admin approval.');
     });
-  </script>
+  </script> -->
+
+  <script>
+  document.getElementById('submit-request-btn').addEventListener('click', function(event) {
+    event.preventDefault(); 
+ 
+
+    // Clear all input fields manually
+    const formElements = document.querySelectorAll('#doctorRegistrationForm input, #doctorRegistrationForm select');
+    formElements.forEach(function(element) {
+      element.value = '';  
+    });
+    alert('Your request has been submitted successfully. Await admin approval.');
+
+    // Reset the button to its initial state (e.g., remove any styles or disable it)
+    const submitButton = document.getElementById('submit-request-btn');
+    submitButton.disabled = false;
+    submitButton.textContent = 'Submit Request'; 
+  });
+</script>
+
 </body>
 </html>

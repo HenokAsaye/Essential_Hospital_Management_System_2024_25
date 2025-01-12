@@ -9,7 +9,12 @@ export function showNotification(message, type) {
     const notificationContainer = document.createElement('div');
     notificationContainer.classList.add('notification', type);
     notificationContainer.innerText = message;
-    document.body.appendChild(notificationContainer);
+
+    const alertContainer = document.getElementById('alert-container');
+    if (alertContainer) {
+        alertContainer.innerHTML = '';  // Clear previous messages
+        alertContainer.appendChild(notificationContainer);
+    }
     setTimeout(() => notificationContainer.remove(), 3000);
 }
 document.addEventListener("DOMContentLoaded", () => {

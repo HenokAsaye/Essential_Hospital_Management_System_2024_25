@@ -12,6 +12,36 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+.nav-link {
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  padding: 4px 12px;
+}
+
+/* Prevent vertical movement on hover */
+.nav-link:hover {
+  color: #0d6efd; 
+  background-color: rgba(255, 255, 255, 0.2); 
+  border-radius: 5px; 
+}
+
+/* Active state */
+.nav-link:active {
+  color: #ffc107; 
+  background-color: rgba(0, 0, 0, 0.2); 
+}
+
+/* Focus state */
+.nav-link:focus {
+  outline: 2px solid #0d6efd;
+  outline-offset: 2px;
+}
+
+/* Ensure no vertical transformations */
+.nav-link:hover, .nav-link:focus, .nav-link:active {
+  transform: none; 
+}
 /* Main Content */
 main {
   flex: 1; /* Ensures the main content takes up available space */
