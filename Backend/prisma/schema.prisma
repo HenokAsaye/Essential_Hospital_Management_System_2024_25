@@ -50,6 +50,7 @@ model Doctor {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   User         User     @relation(fields: [userId], references: [id])
+
 }
 
 model DoctorRequest {

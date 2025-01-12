@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException , BadRequestException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException , BadRequestException,ParseIntPipe } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { SearchDto } from './dto/searchdto';
 import { MedicalDto } from './dto/medicaldto';
@@ -8,7 +8,7 @@ import { ScheduleDto } from './dto/schedule.dto';
 export class DoctorService {
   constructor(private readonly prisma: PrismaService) {}
   async getPatients(searchDto: SearchDto) {
-    const { name } = searchDto;
+    const { name} = searchDto;
     try {
       const patients = await this.prisma.user.findMany({
         where: { name: { contains: name, mode: 'insensitive' } },
@@ -24,12 +24,12 @@ export class DoctorService {
     }
   }
   async editMedicalRecord(medicalDto: MedicalDto, searchDto: SearchDto) {
-    const { name } = searchDto;
+    const { patientId} = searchDto;
     const { diagnosis, note, date } = medicalDto;
   
     try {
       const user = await this.prisma.user.findFirst({
-        where: { name: { equals: name, mode: 'insensitive' } },
+        where: { id: { equals: parseInt(patientId) } },
         include: { patient: true },
       });
   
@@ -37,7 +37,7 @@ export class DoctorService {
         throw new NotFoundException('Patient not found.');
       }
   
-      // Ensure the date is a valid Date instance
+    
       const parsedDate = new Date(date);
       if (isNaN(parsedDate.getTime())) {
         throw new BadRequestException('Invalid date format.');
@@ -62,46 +62,36 @@ export class DoctorService {
       throw new InternalServerErrorException('Failed to update the medical record.');
     }
   }
-  
-  async scheduleAppointment(scheduleDto: ScheduleDto, searchDto: SearchDto) {
-    const { doctorId, date, time } = scheduleDto;
-    const { name } = searchDto;
+  async scheduleAppointment(scheduleDto: ScheduleDto) {
+    const { doctorId, patientId, date, time } = scheduleDto;
     try {
-      const user = await this.prisma.user.findFirst({
-        where: { name: { equals: name, mode: 'insensitive' } },
-      });
-      if (!user) {
-        throw new NotFoundException('Patient not found.');
-      }
-      const doctor = await this.prisma.doctor.findUnique({
-        where: { id: doctorId },
-      });
-      if (!doctor) {
-        throw new NotFoundException('Doctor not found.');
-      }
-      const parsedDate =  new Date(date);
-      if (isNaN(parsedDate.getTime())) {
-        throw new BadRequestException('Invalid date format.');
-      }
-      const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-      if (!timeRegex.test(time)) {
-        throw new BadRequestException('Invalid time format. Expected HH:mm.');
-      }
-      const appointment = await this.prisma.appointment.create({
-        data: {
-          patientId: user.id,
-          doctorId: doctorId,
-          date,
-          time,
-        },
-      });
-      return {
-        message: 'Appointment scheduled successfully.',
-        appointment,
-      };
+        const doctor = await this.prisma.user.findUnique({
+            where: { id: parseInt(doctorId) },
+            select: { name: true },
+        });
+        if (!doctor) {
+            throw new NotFoundException('Doctor not found.');
+        }
+        const appointmentDateTime = new Date(`${date}T${time}`);
+        if (isNaN(appointmentDateTime.getTime())) {
+            throw new BadRequestException('Invalid date or time format.');
+        }
+        const appointment = await this.prisma.appointment.create({
+            data: {
+                patientId: parseInt(patientId),
+                doctorId: parseInt(doctorId),
+                time: appointmentDateTime,
+                date: new Date(date),
+            },
+        });
+
+        return {
+            message: 'Appointment scheduled successfully.',
+            appointment,
+        };
     } catch (error) {
-      console.error('Error in scheduleAppointment:', error);
-      throw new InternalServerErrorException('Failed to schedule the appointment.');
+        console.error('Error in scheduleAppointment:', error);
+        throw new InternalServerErrorException('Failed to schedule the appointment.');
     }
-  }
+}
 }

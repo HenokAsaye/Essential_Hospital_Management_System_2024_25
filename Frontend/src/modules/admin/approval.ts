@@ -10,7 +10,18 @@ export function displayDoctorRequests() {
       requestsTable.innerHTML = ''; 
 
       // Add each doctor request to the table
-      requests.forEach((request) => {
+      interface User {
+        name: string;
+        email: string;
+      }
+
+      interface DoctorRequest {
+        id: number;
+        user: User;
+        status: string;
+      }
+
+      requests.forEach((request: DoctorRequest) => {
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${request.user.name}</td>

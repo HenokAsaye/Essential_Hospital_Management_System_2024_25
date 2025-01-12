@@ -1,5 +1,15 @@
 import { getData, putData, deleteData } from '../../utility/api-helper';
 
+// User interface definition
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  age?: number;
+  contact?: string;
+  role: string;
+}
+
 // Function to display all users
 export function displayUsers() {
   getData('/users') // Correct endpoint to fetch all users
@@ -8,7 +18,7 @@ export function displayUsers() {
       usersTable.innerHTML = ''; // Clear the table
 
       // Add each user to the table
-      users.forEach((user) => {
+      users.forEach((user: User) => {
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${user.name}</td>
@@ -43,11 +53,11 @@ export function showUpdateForm(userId: number) {
   // Fetch the user details for the selected user
   getData('/users') 
     .then((users) => {
-      const user = users.find((u) => u.id === userId);
+      const user: User | undefined = users.find((u: User) => u.id === userId);
       if (user) {
         nameInput.value = user.name;
         emailInput.value = user.email;
-        ageInput.value = user.age || ''; 
+        ageInput.value = user.age !== undefined ? user.age.toString() : '';
         contactInput.value = user.contact || ''; 
         roleInput.value = user.role;
 

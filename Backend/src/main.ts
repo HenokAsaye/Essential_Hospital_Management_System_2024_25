@@ -7,15 +7,21 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-
-  // Serve static files from the 'public' folder in the frontend directory
-  app.useStaticAssets(join(__dirname, '..', '..', 'frontend', 'public'), {
-    index: 'index.html', // Automatically serve 'index.html' at the root URL
+  app.useStaticAssets(join(__dirname, '..', '..', '..', 'Frontend', 'dist', 'public'), {
+    index: false, 
   });
-
-  // Enable CORS for frontend requests
+  app.useStaticAssets(join(__dirname, '..', '..', '..', 'Frontend', 'dist'), {
+    prefix: '/', 
+  });
+  console.log("Serving static assets from:", join(__dirname, '..', '..', '..', 'Frontend', 'dist'));
+  app.useStaticAssets(join(__dirname, '..', '..', '..', 'Frontend', 'dist', 'modules'), {
+    prefix: '/modules', 
+  });
+  app.useStaticAssets(join(__dirname, '..', '..', '..', 'Frontend', 'dist', 'utility'), {
+    prefix: '/utility', 
+  });
   app.enableCors({
-    origin: 'http://localhost:5000', // Change this to match your frontend URL if different
+    origin: 'http://localhost:5000',
     credentials: true,
   });
   app.useGlobalPipes(
@@ -23,9 +29,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
-
   app.use(cookieParser());
-
   const port = process.env.PORT || 5000;
   await app.listen(port);
   console.log(`Application is running on http://localhost:${port}`);

@@ -1,7 +1,6 @@
-import { Controller, Post, Body, Res } from '@nestjs/common';
-import { InternalServerErrorException } from '@nestjs/common';
+import { Body, Controller, Post, Res, UsePipes, ValidationPipe, HttpStatus } from '@nestjs/common';
+import { InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { AdminDto } from './dto/admin.dto';
-import { HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { SignupDto } from './dto/signup.dto';
@@ -17,20 +16,18 @@ export class AuthController {
       const result = await this.authService.registerPatient(signupDto, res);
       return res.status(HttpStatus.CREATED).json({
         message: 'Signup successful',
-        data: result,
+        data: result, 
       });
     } catch (error) {
       console.error('Error during signup:', error.message);
       
-      // Handle UnauthorizedException specifically
       if (error instanceof UnauthorizedException) {
         return res.status(HttpStatus.UNAUTHORIZED).json({
-          message: error.message, // Pass the specific message from the exception
+          message: error.message,
           error: 'Unauthorized',
         });
       }
-      
-      // Fallback for other errors
+
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         message: 'An error occurred during signup',
       });
@@ -48,20 +45,19 @@ export class AuthController {
     } catch (error) {
       console.error('Error during signupDoctor:', error.message);
 
-      // Handle UnauthorizedException specifically
       if (error instanceof UnauthorizedException) {
         return res.status(HttpStatus.UNAUTHORIZED).json({
-          message: error.message, // Pass the specific message from the exception
+          message: error.message,
           error: 'Unauthorized',
         });
       }
 
-      // Fallback for other errors
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         message: 'An error occurred during doctor signup',
       });
     }
   }
+
 
   @Post('login')
   async login(@Body() loginDto: LoginDto, @Res() res: Response) {
@@ -69,12 +65,11 @@ export class AuthController {
       const result = await this.authService.login(loginDto, res);
       return res.status(HttpStatus.OK).json({
         message: 'Login successful',
-        data: result,
+        data: result, 
       });
     } catch (error) {
       console.error('Error during login:', error.message);
 
-      // Handle UnauthorizedException specifically
       if (error instanceof UnauthorizedException) {
         return res.status(HttpStatus.UNAUTHORIZED).json({
           message: error.message,
@@ -104,33 +99,33 @@ export class AuthController {
   }
 
   @Post('firstadmin')
-  async FirstAdmin(@Body() AdminDto: AdminDto, @Res() res: Response) {
+  async FirstAdmin(@Body() adminDto: AdminDto, @Res() res: Response) {
     try {
-      const result = await this.authService.firstAdmin(AdminDto);
+      const result = await this.authService.firstAdmin(adminDto);
       return res.status(HttpStatus.CREATED).json({
-        message: 'Welcome You Are the First Admin',
-        data: result,
+        message: 'Welcome! You are the First Admin',
+        data: result, 
       });
     } catch (error) {
       console.error('Error during firstAdmin signup:', error.message);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        message: 'An Error occurred during firstAdmin signup',
+        message: 'An error occurred during firstAdmin signup',
       });
     }
   }
 
   @Post('loginadmin')
-  async LoginAdmin(@Body() AdminDto: AdminDto, @Res() res: Response) {
+  async LoginAdmin(@Body() adminDto: AdminDto, @Res() res: Response) {
     try {
-      const result = await this.authService.logInAdmin(AdminDto, res);
+      const result = await this.authService.logInAdmin(adminDto, res);
       return res.status(HttpStatus.OK).json({
-        message: 'Welcome Back Admin',
-        data: result,
+        message: 'Welcome Back, Admin',
+        data: result, 
       });
     } catch (error) {
       console.error('Error during Admin login:', error.message);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        message: 'An Error occurred during Admin login',
+        message: 'An error occurred during Admin login',
       });
     }
   }

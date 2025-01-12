@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="./styles/bootstrap.css">
+  <link rel="stylesheet" href="./styles/admin.css">
+  <style>
+    /* Modal/Overlay styles */
+    #update-form {
+      position: fixed;
+      top: 10px;
+      left: 16px;
+      width: 60%;
+      height: 500px;
+
+      background-color: #fff; /* Dark background with transparency */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1050; /* Ensure it appears on top of other content */
+      opacity: 0; /* Start as hidden */
+      visibility: hidden; /* Prevents interaction with hidden elements */
+      transition: opacity 0.3s ease, visibility 0s 0.3s; /* Smooth transition for visibility */
+    }
+
+    #update-form.d-none {
+      opacity: 0; /* Hide the form */
+      visibility: hidden; /* Prevent interaction */
+    }
+
+    #update-form .card {
+      max-width: 500px; /* Adjust based on your desired width */
+      width: 100%;
+      border-radius: 8px; /* Optional, for rounded corners */
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Section -->
+  <header class="bg-primary text-white py-3 shadow-sm">
+    <div class="container d-flex justify-content-between align-items-center">
+      <h1 class="fs-3 mb-0">Admin Dashboard</h1>
+      <nav class="d-flex align-items-center">
+        <ul class="nav me-3">
+          <li class="nav-item">
+            <a href="#" id="user-management-link" class="nav-link text-white">User Management</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" id="doctor-approval-link" class="nav-link text-white">Doctor Approval</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" id="invite-admin-link" class="nav-link text-white">Invite Admin</a>
+          </li>
+        </ul>
+        <a href="#" id="logout-link" class="btn btn-outline-light">Logout</a>
+      </nav>
+    </div>
+  </header>
+  <!-- Main Content Section -->
+  <main class="container my-4">
+    <!-- User Management Section -->
+    <section id="user-management-section" class="admin-section">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="fs-4 mb-0">User Management</h2>
+        </div>
+        <div class="card-body">
+          <table class="table table-striped" id="users-table">
+            <thead class="table-primary">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated dynamically via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Update Form (Hidden by Default) -->
+      <div id="update-form" class="card shadow-sm mt-3 d-none">
+        <div class="card-header bg-warning text-white">
+          <h2 class="fs-5 mb-0">Update User</h2>
+        </div>
+        <div class="card-body">
+          <form id="update-user-form">
+            <div class="mb-3">
+              <label for="update-name" class="form-label">Name</label>
+              <input type="text" id="update-name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="update-email" class="form-label">Email</label>
+              <input type="email" id="update-email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="update-age" class="form-label">Age</label>
+              <input type="number" id="update-age" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="update-contact" class="form-label">Contact</label>
+              <input type="text" id="update-contact" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label for="update-role" class="form-label">Role</label>
+              <select id="update-role" class="form-select">
+                <option value="Doctor">Doctor</option>
+                <option value="Patient">Patient</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </div>
+            <button type="button" id="save-button" class="btn btn-success">Save</button>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- Doctor Approval Section -->
+    <section id="doctor-approval-section" class="admin-section d-none">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="fs-4 mb-0">Doctor Approval</h2>
+        </div>
+        <div class="card-body">
+          <table class="table table-striped" id="doctor-requests-table">
+            <thead class="table-primary">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated dynamically via TS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Invite Admin Section -->
+    <section id="invite-admin-section" class="admin-section d-none">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="fs-4 mb-0">Invite Admin</h2>
+        </div>
+        <div class="card-body">
+          <form id="invite-admin-form">
+            <div class="mb-3">
+              <label for="admin-email" class="form-label">Admin Email</label>
+              <input type="email" id="admin-email" class="form-control" placeholder="Enter admin email" required>
+            </div>
+            <button type="button" id="invite-admin-button" class="btn btn-primary">Send Invitation</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- Footer Section -->
+  <footer class="bg-primary text-white text-center py-3">
+    <p class="mb-0">&copy; 2025 Hospital Management System. All Rights Reserved.</p>
+  </footer>
+  <script>
+    document.getElementById('logout-link').addEventListener('click', function (event) {
+      event.preventDefault(); 
+      window.location.href = '/index.html'; 
+    });
+  </script>
+  <script type="module" src="../main.js"></script>
+  <script type="module" src="../modules/admin/approval.js"></script>
+  <script type="module" src="../modules/admin/invitations.js"></script>
+  <script type="module" src="../modules/admin/users.js"></script>
+  
+</body>
+</html>

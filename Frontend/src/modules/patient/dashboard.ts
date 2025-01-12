@@ -31,7 +31,11 @@ export async function fetchDashboardData(
       medicalHistory,
     };
   } catch (error) {
-    console.error('Error fetching dashboard data:', error.message);
+    if (error instanceof Error) {
+      console.error('Error fetching dashboard data:', error.message);
+    } else {
+      console.error('Error fetching dashboard data:', error);
+    }
     throw error;
   }
 }

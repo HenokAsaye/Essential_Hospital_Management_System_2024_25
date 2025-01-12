@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./styles/bootstrap.css"> 
+  <link rel="stylesheet" href="./styles/main.css">
+  <title>Hospital Management System - Authentication</title>
+</head>
+<body>
+  <div class="container d-flex align-items-center justify-content-center">
+    <div id="auth-forms">
+      <div id="register-section">
+        <h2 class="text-primary">Register</h2>
+        <form id="registerForm">
+          <!-- Name -->
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+          </div>
+
+          <!-- Contact (Phone) -->
+          <div class="form-group">
+            <label for="contact">Phone</label>
+            <input type="text" class="form-control" id="contact" placeholder="Enter your phone number" required>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+          </div>
+
+          <!-- Age -->
+          <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" class="form-control" id="age" placeholder="Enter your age">
+          </div>
+
+          <!-- Gender -->
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select class="form-control" id="gender">
+              <option value="" disabled selected>Select your gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+
+          <!-- Role -->
+          <div class="form-group">
+            <label for="role">Register As</label>
+            <select class="form-control" id="role" required>
+              <option value="" disabled selected>Select your role</option>
+              <option value="Patient">Patient</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Register</button>
+
+          <!-- Doctor Registration Link -->
+          <p class="text-center mt-3">
+            Are you a doctor? <a href="doctorRequest.html" class="text-primary">Request registration here</a>
+          </p>
+
+          <p class="text-center mt-3">
+            Already have an account? <a href="#" id="showLogin" class="text-primary">Login here</a>
+          </p>
+        </form>
+      </div>
+
+      <!-- Login Section -->
+      <div id="login-section" style="display: none;">
+        <h2 class="text-primary">Login</h2>
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="login-email">Email</label>
+            <input type="email" class="form-control" id="login-email" placeholder="Enter your email" required>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" class="form-control" id="login-password" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Login</button>
+          <p class="text-center mt-3">
+            Don't have an account? <a href="#" id="showRegister" class="text-primary">Register here</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toggle between Register and Login sections
+    document.getElementById('showLogin').addEventListener('click', function (e) {
+      e.preventDefault();
+      document.getElementById('register-section').style.display = 'none';
+      document.getElementById('login-section').style.display = 'block';
+    });
+
+    document.getElementById('showRegister').addEventListener('click', function (e) {
+      e.preventDefault();
+      document.getElementById('login-section').style.display = 'none';
+      document.getElementById('register-section').style.display = 'block';
+    });
+
+  </script>
+  <script  type="module" src="../modules/auth/register.js"></script>
+  <script  type="module" src="../modules/auth/login.js"></script>
+</body>
+</html>

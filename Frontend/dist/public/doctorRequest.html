@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./styles/bootstrap.css">
+  
+  <title>Doctor Registration Request</title>
+
+  <style>
+    body {
+      background-image: url('./assets/images/doctor.bg.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+      color: #343a40;
+      font-family: Arial, sans-serif;
+    }
+
+    .form-container {
+      max-width: 500px;
+      width: 100%;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container vh-100 d-flex align-items-center justify-content-center">
+    <form id="doctorRegistrationForm" class="form-container">
+      <h2 class="text-center text-primary mb-4">Doctor Registration Request</h2>
+
+      <!-- Full Name -->
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter your full name" required>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter your email address" required>
+      </div>
+
+      <!-- Phone -->
+      <div class="form-group">
+        <label for="contact">Contact Number</label>
+        <input type="text" class="form-control" id="contact" placeholder="Enter your contact number" required>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+      </div>
+
+      <!-- Age -->
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" class="form-control" id="age" placeholder="Enter your age" min="18" required>
+      </div>
+
+      <!-- Gender -->
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select class="form-control" id="gender" required>
+          <option value="" disabled selected>Select your gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary btn-block mt-3">Submit Request</button>
+    </form>
+  </div>
+
+  <script type="module" src="../modules/auth/doctorRequest.js"></script>
+</body>
+</html>
