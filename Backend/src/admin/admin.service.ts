@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from 'Backend/prisma/prisma.service';
-=======
 import { Injectable, UnauthorizedException,HttpException,HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
->>>>>>> route
 import { User, DoctorRequest, Role, requestStatus } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
@@ -12,11 +7,7 @@ import {requestDto} from "./dto/requests.dto"
 import { HandleDoctorRequestDto } from './dto/handle-doctor-request.dto';
 import { SendAdminInviteDto } from './dto/send-user-email.dto';
 import { FindUserByEmailDto } from './dto/find-user-email.dto';
-<<<<<<< HEAD
-import { sendInviteEmail } from 'Backend/src/Email/Email';
-=======
 import { sendInviteEmail } from '../Email/Email';
->>>>>>> route
 
 
 @Injectable()
