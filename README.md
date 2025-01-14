@@ -10,3 +10,4 @@ Group Members
 | Lidia Asamnew      | UGR/2984/15 |
 | Ruhama Ristu       | UGR/4614/15 |
 
+Trigger recalculation
