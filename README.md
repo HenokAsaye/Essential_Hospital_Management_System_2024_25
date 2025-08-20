@@ -1,4 +1,4 @@
-# Essential_Hospital_Management_System
+# Essential_Hospital_ManagementSystem
 
 Group Members
 
